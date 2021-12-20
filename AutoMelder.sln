@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMelder", "AutoMelder.csproj", "{39CB4DCB-E58D-4374-9771-F0ABCAF81A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlamaLibrary", "..\..\Quest Behaviors\__LlamaLibrary\LlamaLibrary.csproj", "{196EE308-0205-4CC4-B449-51064F7E9960}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39CB4DCB-E58D-4374-9771-F0ABCAF81A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CB4DCB-E58D-4374-9771-F0ABCAF81A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CB4DCB-E58D-4374-9771-F0ABCAF81A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CB4DCB-E58D-4374-9771-F0ABCAF81A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{196EE308-0205-4CC4-B449-51064F7E9960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{196EE308-0205-4CC4-B449-51064F7E9960}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{196EE308-0205-4CC4-B449-51064F7E9960}.Release|Any CPU.ActiveCfg = Release|x64
+		{196EE308-0205-4CC4-B449-51064F7E9960}.Release|Any CPU.Build.0 = Release|x64
+	EndGlobalSection
+EndGlobal
