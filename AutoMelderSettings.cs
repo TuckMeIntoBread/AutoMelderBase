@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using AutoMelder.MeldingLogic;
 
 namespace AutoMelder
 {
@@ -8,5 +9,7 @@ namespace AutoMelder
         {
             InitializeComponent();
         }
+
+        public MeldRequest MeldRequest = new MeldRequest();
     }
 }
