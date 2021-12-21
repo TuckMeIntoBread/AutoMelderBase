@@ -15,6 +15,8 @@ namespace AutoMelder.MeldingLogic
         
         public uint ItemId { get; set; }
 
+        public BagSlot EquipSlot => InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[GetSlotByType(Type)];
+
         public string ItemName => DataManager.GetItem(ItemId)?.CurrentLocaleName;
         
         public MateriaItem Slot1 { get; set; }
@@ -39,12 +41,7 @@ namespace AutoMelder.MeldingLogic
             }
         }
 
-        public bool IsItemMismatched()
-        {
-            EquipmentSlot equipType = GetSlotByType(Type);
-            BagSlot equipSlot = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[equipType];
-            return ItemId != equipSlot.RawItemId;
-        }
+        public bool IsItemMismatched() => ItemId != (EquipSlot?.RawItemId ?? 0);
 
         public void SetInfo(JToken info)
         {

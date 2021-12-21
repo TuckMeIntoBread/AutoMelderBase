@@ -31,51 +31,51 @@ namespace AutoMelder
             Bag equipSlots = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems);
             if (MeldRequest.MainHand?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"MainHand Mismatch: {MeldRequest.MainHand.ItemName} - {equipSlots[EquipmentSlot.MainHand].Name}");
+                sb.AppendLine($"MainHand Mismatch: {MeldRequest.MainHand.ItemName} - {equipSlots[EquipmentSlot.MainHand]?.Name}");
             }
             if (MeldRequest.OffHand?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"OffHand Mismatch: {MeldRequest.OffHand.ItemName} - {equipSlots[EquipmentSlot.OffHand].Name}");
+                sb.AppendLine($"OffHand Mismatch: {MeldRequest.OffHand.ItemName} - {equipSlots[EquipmentSlot.OffHand]?.Name}");
             }
             if (MeldRequest.Head?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Head Mismatch: {MeldRequest.Head.ItemName} - {equipSlots[EquipmentSlot.Head].Name}");
+                sb.AppendLine($"Head Mismatch: {MeldRequest.Head.ItemName} - {equipSlots[EquipmentSlot.Head]?.Name}");
             }
             if (MeldRequest.Chest?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Chest Mismatch: {MeldRequest.Chest.ItemName} - {equipSlots[EquipmentSlot.Body].Name}");
+                sb.AppendLine($"Chest Mismatch: {MeldRequest.Chest.ItemName} - {equipSlots[EquipmentSlot.Body]?.Name}");
             }
             if (MeldRequest.Hands?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Hands Mismatch: {MeldRequest.Hands.ItemName} - {equipSlots[EquipmentSlot.Hands].Name}");
+                sb.AppendLine($"Hands Mismatch: {MeldRequest.Hands.ItemName} - {equipSlots[EquipmentSlot.Hands]?.Name}");
             }
             if (MeldRequest.Legs?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Legs Mismatch: {MeldRequest.Legs.ItemName} - {equipSlots[EquipmentSlot.Legs].Name}");
+                sb.AppendLine($"Legs Mismatch: {MeldRequest.Legs.ItemName} - {equipSlots[EquipmentSlot.Legs]?.Name}");
             }
             if (MeldRequest.Feet?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Feet Mismatch: {MeldRequest.Feet.ItemName} - {equipSlots[EquipmentSlot.Feet].Name}");
+                sb.AppendLine($"Feet Mismatch: {MeldRequest.Feet.ItemName} - {equipSlots[EquipmentSlot.Feet]?.Name}");
             }
             if (MeldRequest.Ears?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Ears Mismatch: {MeldRequest.Ears.ItemName} - {equipSlots[EquipmentSlot.Earring].Name}");
+                sb.AppendLine($"Ears Mismatch: {MeldRequest.Ears.ItemName} - {equipSlots[EquipmentSlot.Earring]?.Name}");
             }
             if (MeldRequest.Neck?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Neck Mismatch: {MeldRequest.Neck.ItemName} - {equipSlots[EquipmentSlot.Necklace].Name}");
+                sb.AppendLine($"Neck Mismatch: {MeldRequest.Neck.ItemName} - {equipSlots[EquipmentSlot.Necklace]?.Name}");
             }
             if (MeldRequest.Wrist?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"Wrist Mismatch: {MeldRequest.Wrist.ItemName} - {equipSlots[EquipmentSlot.Bracelet].Name}");
+                sb.AppendLine($"Wrist Mismatch: {MeldRequest.Wrist.ItemName} - {equipSlots[EquipmentSlot.Bracelet]?.Name}");
             }
             if (MeldRequest.RingLeft?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"RingLeft Mismatch: {MeldRequest.RingLeft.ItemName} - {equipSlots[EquipmentSlot.Ring1].Name}");
+                sb.AppendLine($"RingLeft Mismatch: {MeldRequest.RingLeft.ItemName} - {equipSlots[EquipmentSlot.Ring1]?.Name}");
             }
             if (MeldRequest.RingRight?.IsItemMismatched() ?? false)
             {
-                sb.AppendLine($"RingRight Mismatch: {MeldRequest.RingRight.ItemName} - {equipSlots[EquipmentSlot.Ring2].Name}");
+                sb.AppendLine($"RingRight Mismatch: {MeldRequest.RingRight.ItemName} - {equipSlots[EquipmentSlot.Ring2]?.Name}");
             }
 
             if (sb.Length > 0)
