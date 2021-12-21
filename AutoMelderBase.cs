@@ -30,7 +30,7 @@ namespace AutoMelder
         public override Composite Root => _root;
         public override bool WantButton { get; } = true;
         private AutoMelderSettings _settings;
-        private bool _isDone = false;
+        private static bool _isDone = false;
 
         public override void Initialize()
         {
@@ -56,16 +56,22 @@ namespace AutoMelder
 
         public override void Start()
         {
+            _isDone = false;
             _root = new ActionRunCoroutine(r => Run());
         }
 
         private async Task<bool> Run()
         {
             if (_isDone) return false;
+            _lastValidItem = 0;
+            _lastValidMateria = 0;
+            if (_settings?.MeldRequest == null)
+            {
+                Log.Error("Nothing imported!");
+                TreeRoot.Stop();
+                return false;
+            }
             MeldRequest meldRequest = _settings.MeldRequest;
-            if (meldRequest == null) return false;
-            await MeldItem(meldRequest.MainHand);
-            await MeldItem(meldRequest.OffHand);
             await MeldItem(meldRequest.Head);
             await MeldItem(meldRequest.Chest);
             await MeldItem(meldRequest.Hands);
@@ -76,6 +82,8 @@ namespace AutoMelder
             await MeldItem(meldRequest.Wrist);
             await MeldItem(meldRequest.RingLeft);
             await MeldItem(meldRequest.RingRight);
+            await MeldItem(meldRequest.MainHand);
+            await MeldItem(meldRequest.OffHand);
 
             _isDone = true;
             TreeRoot.Stop("Done melding materia.");
@@ -91,6 +99,7 @@ namespace AutoMelder
             Log.Information($"Trying to affix materia to {equipSlot.Name}");
             for (int i = alreadyMeldedCount; i < 5; i++)
             {
+                await Coroutine.Sleep(800);
                 MateriaItem materiaToMeld = meldInfo.GetSlotByIndex(i);
                 if (materiaToMeld == null) break;
                 BagSlot materiaSlot = GetMateriaSlot(materiaToMeld);
@@ -101,6 +110,21 @@ namespace AutoMelder
                 }
 
                 if (!await TryAffixMateria(equipSlot, materiaSlot)) return;
+                await Coroutine.Sleep(800);
+                var alreadyMeldedInfo = equipSlot.Materia();
+                if (alreadyMeldedInfo.Count <= i)
+                {
+                    Log.Error("Failed to meld materia! Maybe we're out?");
+                    return;
+                }
+
+                if (alreadyMeldedInfo[i].Key != materiaToMeld.Key)
+                {
+                    Log.Error("Last materia melded doesn't match what we were supposed to meld! Oops...");
+                    _isDone = true;
+                    TreeRoot.Stop();
+                    return;
+                }
             }
 
             if (MateriaAttach.Instance.IsOpen)
@@ -129,12 +153,14 @@ namespace AutoMelder
             }
 
             Log.Information("Sending BagSlot Affix");
-            await Coroutine.Wait(1000, () => AgentMeld.Instance.Ready);
-            await Coroutine.Wait(1000, () => AgentMeld.Instance.CanMeld);
+            await Coroutine.Wait(1500, () => AgentMeld.Instance.CanMeld);
+            if (!materiaToUse.IsValid || !materiaToUse.IsFilled) return false;
             itemToAffix.AffixMateria(materiaToUse, true);
             await Coroutine.Wait(20000, () => !AgentMeld.Instance.Ready);
             await Coroutine.Wait(20000, () => AgentMeld.Instance.Ready);
             await Coroutine.Wait(7000, () => !MateriaAttachDialog.Instance.IsOpen);
+            MateriaAttach.Instance.Close();
+            await Coroutine.Wait(7000, () => !MateriaAttach.Instance.IsOpen);
             return true;
         }
 
@@ -143,7 +169,7 @@ namespace AutoMelder
             if (MateriaAttach.Instance.IsOpen) return true;
             for (int i = 0; i < 2; i++)
             {
-                Log.Information($"Opening meld window, attempt #{i+1}");
+                Log.Information($"Opening meld window");
                 itemToAffix.OpenMeldInterface();
                 await Coroutine.Wait(5000, () => MateriaAttach.Instance.IsOpen);
                 if (MateriaAttach.Instance.IsOpen)
@@ -155,26 +181,46 @@ namespace AutoMelder
             return false;
         }
 
+        private static int _lastValidItem;
+        private static int _lastValidMateria;
+
         private static async Task<bool> OpenMateriaAttachDialog()
         {
             if (MateriaAttachDialog.Instance.IsOpen) return true;
-            for (int i = 0; i < 2; i++)
+            Log.Information("Opening materia attach dialog");
+            // Try to select based on materia alone first... we should have them open due to meld requesting the specific item needed?
+            for (int i = _lastValidMateria; i < 10; i++)
             {
-                Log.Information($"Opening materia attach dialog, attempt #{i+1}");
-                MateriaAttach.Instance.ClickItem(1);
-                await Coroutine.Sleep(1000);
-                for (int j = 0; j < 15; j++)
+                MateriaAttach.Instance.ClickMateria(i);
+                int attachWait = _lastValidMateria > 0 && i == _lastValidMateria ? 1500 : 200;
+                await Coroutine.Wait(attachWait, () => MateriaAttachDialog.Instance.IsOpen);
+                if (MateriaAttachDialog.Instance.IsOpen)
+                {
+                    _lastValidMateria = i;
+                    goto exitLoop;
+                }
+            }
+            for (int i = _lastValidItem; i < 12; i++)
+            {
+                MateriaAttach.Instance.ClickItem(i);
+                int clickWait = _lastValidItem > 0 && i == _lastValidItem ? 500 : 250;
+                await Coroutine.Sleep(clickWait);
+                for (int j = _lastValidMateria; j < 10; j++)
                 {
                     MateriaAttach.Instance.ClickMateria(j);
-                    await Coroutine.Wait(250, () => MateriaAttachDialog.Instance.IsOpen);
+                    int attachWait = _lastValidMateria > 0 && j == _lastValidMateria ? 1500 : 200;
+                    await Coroutine.Wait(attachWait, () => MateriaAttachDialog.Instance.IsOpen);
+                    if (MateriaAttachDialog.Instance.IsOpen)
+                    {
+                        _lastValidMateria = j;
+                        _lastValidItem = i;
+                        goto exitLoop;
+                    }
                 }
-                MateriaAttach.Instance.ClickMateria(0);
-                await Coroutine.Wait(2500, () => AgentMeld.Instance.Ready);
-                await Coroutine.Wait(2500, () => MateriaAttachDialog.Instance.IsOpen);
-                if (MateriaAttachDialog.Instance.IsOpen) return true;
             }
-
-            return false;
+            exitLoop:
+            await Coroutine.Wait(3000, () => AgentMeld.Instance.CanMeld || AgentMeld.Instance.Ready);
+            return MateriaAttachDialog.Instance.IsOpen;
         }
 
         private static BagSlot GetMateriaSlot(MateriaItem materiaItem)
