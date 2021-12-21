@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ff14bot.Enums;
 using LlamaLibrary.JsonObjects;
@@ -58,8 +59,16 @@ namespace AutoMelder
             }
         }
 
+        private static readonly Regex CondensedNameRegex = new Regex(@"^(?:(?:Craftsman's|Gatherer's) )?(?<name>(?:[A-Za-z']+ ?){1,2}) Materia (?<rNumTier>[IVXLCDM]+)$");
+
         public static string ToFullString(this MateriaItem materiaItem)
         {
+            string itemName = materiaItem.ItemName;
+            Match match = CondensedNameRegex.Match(itemName);
+            if (match.Success)
+            {
+                return $"{match.Groups["name"].Value} {match.Groups["rNumTier"].Value} {materiaItem.Stat} +{materiaItem.Value}";
+            }
             return $"{materiaItem.ItemName} {materiaItem.Stat} +{materiaItem.Value}";
         }
     }
