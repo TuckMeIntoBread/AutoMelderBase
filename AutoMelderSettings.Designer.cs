@@ -836,6 +836,7 @@ namespace AutoMelder
             this.importButton.TabIndex = 16;
             this.importButton.Text = "Ariyala Import";
             this.importButton.UseVisualStyleBackColor = true;
+            this.importButton.Click += new System.EventHandler(this.ImportButton_Click);
             // 
             // estimateButton
             // 
@@ -905,7 +906,6 @@ namespace AutoMelder
             this.wristGBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
