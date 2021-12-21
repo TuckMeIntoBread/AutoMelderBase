@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using AutoMelder.Ariyala;
 using ff14bot.Enums;
@@ -33,11 +34,11 @@ namespace AutoMelder.MeldingLogic
         {
             foreach (TextBox textBox in settingsForm.GetAllControls().OfType<TextBox>().Where(x => x.Name.StartsWith(Type) && x.Name.Contains("Materia")))
             {
-                if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToRomanString() ?? "None";
-                if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToRomanString() ?? "None";
-                if (textBox.Name.EndsWith("3")) textBox.Text = Slot3?.ToRomanString() ?? "None";
-                if (textBox.Name.EndsWith("4")) textBox.Text = Slot4?.ToRomanString() ?? "None";
-                if (textBox.Name.EndsWith("5")) textBox.Text = Slot5?.ToRomanString() ?? "None";
+                if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToFullString() ?? "None";
+                if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToFullString() ?? "None";
+                if (textBox.Name.EndsWith("3")) textBox.Text = Slot3?.ToFullString() ?? "None";
+                if (textBox.Name.EndsWith("4")) textBox.Text = Slot4?.ToFullString() ?? "None";
+                if (textBox.Name.EndsWith("5")) textBox.Text = Slot5?.ToFullString() ?? "None";
             }
         }
 
@@ -56,9 +57,9 @@ namespace AutoMelder.MeldingLogic
             }
         }
 
-        private void SetSlot(int slot, MateriaItem materia)
+        private void SetSlot(int index, MateriaItem materia)
         {
-            switch (slot)
+            switch (index)
             {
                 case 0:
                     Slot1 = materia;
@@ -75,6 +76,25 @@ namespace AutoMelder.MeldingLogic
                 case 4:
                     Slot5 = materia;
                     break;
+            }
+        }
+        
+        public MateriaItem GetSlotByIndex(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return Slot1;
+                case 1:
+                    return Slot2;
+                case 2:
+                    return Slot3;
+                case 3:
+                    return Slot4;
+                case 4:
+                    return Slot5;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(index), $"{index} is out of range for materia slots! Valid range 0-4");
             }
         }
 

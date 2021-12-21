@@ -58,9 +58,9 @@ namespace AutoMelder
             }
         }
 
-        public static string ToRomanString(this MateriaItem materiaItem)
+        public static string ToFullString(this MateriaItem materiaItem)
         {
-            return $"{materiaItem.ItemName} {ToRomanNumeral.ArabicToRoman(materiaItem.Tier)} +{materiaItem.Value}";
+            return $"{materiaItem.ItemName} {materiaItem.Stat} +{materiaItem.Value}";
         }
     }
 }

@@ -65,7 +65,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="MeldingLogic\MeldInfo.cs" />
     <Compile Include="MeldingLogic\MeldRequest.cs" />
-    <Compile Include="ToRomanNumeral.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AutoMelderSettings.resx">
