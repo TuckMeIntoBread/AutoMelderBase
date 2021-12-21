@@ -96,7 +96,7 @@ namespace AutoMelder
             if (equipSlot == null || !equipSlot.IsValid || !equipSlot.IsFilled) return;
             int alreadyMeldedCount = equipSlot.MateriaCount();
             if (alreadyMeldedCount >= 5 || meldInfo.GetSlotByIndex(0) == null) return;
-            Log.Information($"Trying to affix materia to {equipSlot.Name}");
+            Log.Debug($"Trying to affix materia to {equipSlot.Name}");
             for (int i = alreadyMeldedCount; i < 5; i++)
             {
                 await Coroutine.Sleep(800);
@@ -129,7 +129,7 @@ namespace AutoMelder
 
             if (MateriaAttach.Instance.IsOpen)
             {
-                Log.Information("Closing meld window");
+                Log.Debug("Closing meld window");
                 MateriaAttach.Instance.Close();
                 await Coroutine.Wait(7000, () => !MateriaAttach.Instance.IsOpen);
             }
@@ -152,7 +152,7 @@ namespace AutoMelder
                 return false;
             }
 
-            Log.Information("Sending BagSlot Affix");
+            Log.Debug("Sending BagSlot Affix");
             await Coroutine.Wait(1500, () => AgentMeld.Instance.CanMeld);
             if (!materiaToUse.IsValid || !materiaToUse.IsFilled) return false;
             itemToAffix.AffixMateria(materiaToUse, true);
@@ -169,7 +169,7 @@ namespace AutoMelder
             if (MateriaAttach.Instance.IsOpen) return true;
             for (int i = 0; i < 2; i++)
             {
-                Log.Information($"Opening meld window");
+                Log.Debug("Opening meld window");
                 itemToAffix.OpenMeldInterface();
                 await Coroutine.Wait(5000, () => MateriaAttach.Instance.IsOpen);
                 if (MateriaAttach.Instance.IsOpen)
@@ -187,7 +187,7 @@ namespace AutoMelder
         private static async Task<bool> OpenMateriaAttachDialog()
         {
             if (MateriaAttachDialog.Instance.IsOpen) return true;
-            Log.Information("Opening materia attach dialog");
+            Log.Debug("Opening materia attach dialog");
             // Try to select based on materia alone first... we should have them open due to meld requesting the specific item needed?
             for (int i = _lastValidMateria; i < 10; i++)
             {
