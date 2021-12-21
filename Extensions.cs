@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ff14bot.Enums;
+using LlamaLibrary.JsonObjects;
 
 namespace AutoMelder
 {
@@ -55,6 +56,11 @@ namespace AutoMelder
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), $"Unknown EquipmentSlot Type: {type}");
             }
+        }
+
+        public static string ToRomanString(this MateriaItem materiaItem)
+        {
+            return $"{materiaItem.ItemName} {ToRomanNumeral.ArabicToRoman(materiaItem.Tier)} +{materiaItem.Value}";
         }
     }
 }

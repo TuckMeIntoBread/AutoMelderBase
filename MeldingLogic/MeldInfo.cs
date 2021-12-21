@@ -33,11 +33,11 @@ namespace AutoMelder.MeldingLogic
         {
             foreach (TextBox textBox in settingsForm.GetAllControls().OfType<TextBox>().Where(x => x.Name.StartsWith(Type) && x.Name.Contains("Materia")))
             {
-                if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToString() ?? "None";
-                if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToString() ?? "None";
-                if (textBox.Name.EndsWith("3")) textBox.Text = Slot3?.ToString() ?? "None";
-                if (textBox.Name.EndsWith("4")) textBox.Text = Slot4?.ToString() ?? "None";
-                if (textBox.Name.EndsWith("5")) textBox.Text = Slot5?.ToString() ?? "None";
+                if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToRomanString() ?? "None";
+                if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToRomanString() ?? "None";
+                if (textBox.Name.EndsWith("3")) textBox.Text = Slot3?.ToRomanString() ?? "None";
+                if (textBox.Name.EndsWith("4")) textBox.Text = Slot4?.ToRomanString() ?? "None";
+                if (textBox.Name.EndsWith("5")) textBox.Text = Slot5?.ToRomanString() ?? "None";
             }
         }
 
