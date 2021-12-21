@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LlamaLibrary.JsonObjects;
 
-namespace AutoMelder.AriyalaParser
+namespace AutoMelder.Ariyala
 {
     public static class MateriaParser
     {

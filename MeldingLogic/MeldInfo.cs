@@ -1,12 +1,21 @@
-﻿using AutoMelder.AriyalaParser;
+﻿using System.Linq;
+using System.Windows.Forms;
+using AutoMelder.Ariyala;
+using ff14bot.Enums;
+using ff14bot.Managers;
 using LlamaLibrary.JsonObjects;
 using Newtonsoft.Json.Linq;
+using static AutoMelder.Extensions;
 
 namespace AutoMelder.MeldingLogic
 {
     public class MeldInfo
     {
+        public string Type { get; }
+        
         public uint ItemId { get; set; }
+
+        public string ItemName => DataManager.GetItem(ItemId)?.CurrentLocaleName;
         
         public MateriaItem Slot1 { get; set; }
         
@@ -18,14 +27,29 @@ namespace AutoMelder.MeldingLogic
 
         public MateriaItem Slot5 { get; set; }
 
-        public void SetInfo(JToken info, string ariyalaName)
+        public void SetTextBoxes(Form settingsForm)
         {
-            ItemId = info["items"][ariyalaName].Value<uint>();
-            SetMateria(info["materiaData"]);
+            foreach (TextBox textBox in settingsForm.GetAllControls().OfType<TextBox>().Where(x => x.Name.StartsWith(Type) && x.Name.Contains("Materia")))
+            {
+                if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToString() ?? "None";
+                if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToString() ?? "None";
+                if (textBox.Name.EndsWith("3")) textBox.Text = Slot3?.ToString() ?? "None";
+                if (textBox.Name.EndsWith("4")) textBox.Text = Slot4?.ToString() ?? "None";
+                if (textBox.Name.EndsWith("5")) textBox.Text = Slot5?.ToString() ?? "None";
+            }
         }
 
-        private void SetMateria(JToken materiaInfo)
+        public bool IsItemMismatched()
         {
+            EquipmentSlot equipType = GetSlotByType(Type);
+            BagSlot equipSlot = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[equipType];
+            return ItemId != equipSlot.RawItemId;
+        }
+
+        public void SetInfo(JToken info)
+        {
+            ItemId = info["items"][Type].Value<uint>();
+            JToken materiaInfo = info["materiaData"][$"{Type}-{ItemId}"];
             if (materiaInfo == null || !materiaInfo.HasValues) return;
             string[] materiaArray = materiaInfo.Value<string[]>();
             for (int i = 0; i < materiaArray.Length; i++)
@@ -55,6 +79,11 @@ namespace AutoMelder.MeldingLogic
                     Slot5 = materia;
                     break;
             }
+        }
+
+        public MeldInfo(string type)
+        {
+            Type = type;
         }
     }
 }

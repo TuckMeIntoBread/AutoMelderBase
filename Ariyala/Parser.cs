@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
@@ -9,16 +7,22 @@ using AutoMelder.MeldingLogic;
 using LlamaLibrary.Logging;
 using Newtonsoft.Json.Linq;
 
-namespace AutoMelder.AriyalaParser
+namespace AutoMelder.Ariyala
 {
-    public static class AriyalaParser
+    public static class Parser
     {
         private static readonly LLogger Log = new LLogger("AriyalaParser", Colors.Coral);
         private static readonly Regex CodeParser = new Regex(@"[A-Z0-9]{4,8}\/?$");
         
         public static MeldRequest GetAriyalaMeldInfo(string ariyalaCode)
         {
+            if (!CodeParser.IsMatch(ariyalaCode))
+            {
+                Log.Error($"Couldn't parse {ariyalaCode} as an ariyala ID.");
+                return new MeldRequest();
+            }
             string parsedCode = CodeParser.Match(ariyalaCode).Value;
+            Log.Information($"Parsing ariyala code {parsedCode}");
             
             var uri = $"https://ffxiv.ariyala.com/store.app?identifier={parsedCode}";
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
@@ -46,18 +50,8 @@ namespace AutoMelder.AriyalaParser
             var dataset = ariyalaResponse["content"].Value<string>();
             JToken info = ariyalaResponse["datasets"][dataset]["normal"];
             MeldRequest meldRequest = new MeldRequest();
-            meldRequest.MainHand.SetInfo(info, "mainhand");
-            meldRequest.OffHand.SetInfo(info, "offhand");
-            meldRequest.Head.SetInfo(info, "head");
-            meldRequest.Chest.SetInfo(info, "chest");
-            meldRequest.Hands.SetInfo(info, "hands");
-            meldRequest.Legs.SetInfo(info, "legs");
-            meldRequest.Feet.SetInfo(info, "feet");
-            meldRequest.Ears.SetInfo(info, "ears");
-            meldRequest.Neck.SetInfo(info, "neck");
-            meldRequest.Wrist.SetInfo(info, "wrist");
-            meldRequest.RingLeft.SetInfo(info, "ringLeft");
-            meldRequest.RingRight.SetInfo(info, "ringRight");
+            meldRequest.SetAllInfo(info);
+            Log.Information("Parsed ariyala info.");
 
             return meldRequest;
         }
