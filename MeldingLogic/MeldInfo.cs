@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AutoMelder.Ariyala;
@@ -46,13 +47,18 @@ namespace AutoMelder.MeldingLogic
 
         public void SetInfo(JToken info)
         {
+            if (info["items"][Type] == null) return;
             ItemId = info["items"][Type].Value<uint>();
             JToken materiaInfo = info["materiaData"][$"{Type}-{ItemId}"];
             if (materiaInfo == null || !materiaInfo.HasValues) return;
-            string[] materiaArray = materiaInfo.Value<string[]>();
-            for (int i = 0; i < materiaArray.Length; i++)
+            var stringList = new List<string>();
+            foreach (JToken stringToken in materiaInfo)
             {
-                MateriaItem materia = MateriaParser.GetMateriaItem(materiaArray[i]);
+                stringList.Add(stringToken.Value<string>());
+            }
+            for (int i = 0; i < stringList.Count; i++)
+            {
+                MateriaItem materia = MateriaParser.GetMateriaItem(stringList[i]);
                 SetSlot(i, materia);
             }
         }
