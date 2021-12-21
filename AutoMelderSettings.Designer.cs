@@ -839,6 +839,7 @@ namespace AutoMelder
             // 
             // estimateButton
             // 
+            this.estimateButton.Enabled = false;
             this.estimateButton.Location = new System.Drawing.Point(601, 772);
             this.estimateButton.Name = "estimateButton";
             this.estimateButton.Size = new System.Drawing.Size(98, 24);
