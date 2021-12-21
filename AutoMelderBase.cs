@@ -7,7 +7,6 @@ using Buddy.Coroutines;
 using ff14bot;
 using ff14bot.AClasses;
 using ff14bot.Behavior;
-using ff14bot.Enums;
 using ff14bot.Managers;
 using LlamaLibrary.Extensions;
 using LlamaLibrary.JsonObjects;
@@ -21,7 +20,7 @@ namespace AutoMelder
 {
     public class AutoMelder : BotBase
     {
-        private static readonly LLogger Log = new LLogger("AutoMelder", Colors.Orange);
+        private static readonly LLogger Log = new LLogger("AutoMelder", Colors.Teal);
 
         private Composite _root;
         public override string Name => "AutoMelder";
@@ -31,6 +30,7 @@ namespace AutoMelder
         public override Composite Root => _root;
         public override bool WantButton { get; } = true;
         private AutoMelderSettings _settings;
+        private bool _isDone = false;
 
         public override void Initialize()
         {
@@ -61,6 +61,7 @@ namespace AutoMelder
 
         private async Task<bool> Run()
         {
+            if (_isDone) return false;
             MeldRequest meldRequest = _settings.MeldRequest;
             if (meldRequest == null) return false;
             await MeldItem(meldRequest.MainHand);
@@ -75,7 +76,9 @@ namespace AutoMelder
             await MeldItem(meldRequest.Wrist);
             await MeldItem(meldRequest.RingLeft);
             await MeldItem(meldRequest.RingRight);
-            
+
+            _isDone = true;
+            TreeRoot.Stop("Done melding materia.");
             return false;
         }
 
@@ -84,11 +87,12 @@ namespace AutoMelder
             BagSlot equipSlot = meldInfo?.EquipSlot;
             if (equipSlot == null || !equipSlot.IsValid || !equipSlot.IsFilled) return;
             int alreadyMeldedCount = equipSlot.MateriaCount();
-            if (alreadyMeldedCount >= 5) return;
+            if (alreadyMeldedCount >= 5 || meldInfo.GetSlotByIndex(0) == null) return;
             Log.Information($"Trying to affix materia to {equipSlot.Name}");
             for (int i = alreadyMeldedCount; i < 5; i++)
             {
                 MateriaItem materiaToMeld = meldInfo.GetSlotByIndex(i);
+                if (materiaToMeld == null) break;
                 BagSlot materiaSlot = GetMateriaSlot(materiaToMeld);
                 if (materiaSlot == null || !materiaSlot.IsValid || !materiaSlot.IsFilled)
                 {
@@ -157,11 +161,16 @@ namespace AutoMelder
             for (int i = 0; i < 2; i++)
             {
                 Log.Information($"Opening materia attach dialog, attempt #{i+1}");
-                MateriaAttach.Instance.ClickItem(0);
+                MateriaAttach.Instance.ClickItem(1);
                 await Coroutine.Sleep(1000);
+                for (int j = 0; j < 15; j++)
+                {
+                    MateriaAttach.Instance.ClickMateria(j);
+                    await Coroutine.Wait(250, () => MateriaAttachDialog.Instance.IsOpen);
+                }
                 MateriaAttach.Instance.ClickMateria(0);
-                await Coroutine.Wait(7000, () => AgentMeld.Instance.Ready);
-                await Coroutine.Wait(5000, () => MateriaAttachDialog.Instance.IsOpen);
+                await Coroutine.Wait(2500, () => AgentMeld.Instance.Ready);
+                await Coroutine.Wait(2500, () => MateriaAttachDialog.Instance.IsOpen);
                 if (MateriaAttachDialog.Instance.IsOpen) return true;
             }
 
