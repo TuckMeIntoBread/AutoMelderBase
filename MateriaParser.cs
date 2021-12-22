@@ -3,11 +3,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using LlamaLibrary.JsonObjects;
 
-namespace AutoMelder.Ariyala
+namespace AutoMelder
 {
     public static class MateriaParser
     {
-        private static readonly Dictionary<string, string> AttributeDictionary = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> AriyalaAttributeDictionary = new Dictionary<string, string>
         {
             { "STR", "Strength" },
             { "DEX", "Dexterity" },
@@ -66,19 +66,21 @@ namespace AutoMelder.Ariyala
             { "PCP", "Perception" },
         };
 
-        private static readonly Regex MateriaRegex = new Regex(@"(?<attribute>[^:]+):(?<tier>\d+)");
+        private static readonly Regex AriyalaMateriaRegex = new Regex(@"(?<attribute>[^:]+):(?<tier>\d+)");
 
         private static Dictionary<int, List<MateriaItem>> MateriaList => LlamaLibrary.ResourceManager.MateriaList.Value;
 
-        public static MateriaItem GetMateriaItem(string ariyalaMateriaString)
+        public static MateriaItem GetMateriaFromAriyala(string ariyalaMateriaString)
         {
-            Match match = MateriaRegex.Match(ariyalaMateriaString);
-            string stat = AttributeDictionary[match.Groups["attribute"].Value];
+            Match match = AriyalaMateriaRegex.Match(ariyalaMateriaString);
+            string stat = AriyalaAttributeDictionary[match.Groups["attribute"].Value];
             int tier = int.Parse(match.Groups["tier"].Value);
 
             var statList = MateriaList.Values.First(x => x.Any(m => m.Stat == stat));
             MateriaItem specificMateria = statList.First(x => x.Tier == tier);
             return specificMateria;
         }
+
+        public static MateriaItem GetMateriaFromId(uint materiaId) => MateriaList.SelectMany(x => x.Value).First(x => x.Key == materiaId);
     }
 }

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using AutoMelder.Ariyala;
+using AutoMelder.MeldingLogic;
 using ff14bot.Enums;
 using LlamaLibrary.JsonObjects;
+using Newtonsoft.Json.Linq;
 
 namespace AutoMelder
 {
@@ -25,39 +28,76 @@ namespace AutoMelder
                 yield return next;
             }
         }
-
-        public static EquipmentSlot GetSlotByType(string type)
+        
+        public static string AriyalaKey(this EquipmentSlot equipmentSlot)
         {
-            switch (type)
+            switch (equipmentSlot)
             {
-                case "mainhand":
-                    return EquipmentSlot.MainHand;
-                case "offhand":
-                    return EquipmentSlot.OffHand;
-                case "head":
-                    return EquipmentSlot.Head;
-                case "chest":
-                    return EquipmentSlot.Body;
-                case "hands":
-                    return EquipmentSlot.Hands;
-                case "legs":
-                    return EquipmentSlot.Legs;
-                case "feet":
-                    return EquipmentSlot.Feet;
-                case "ears":
-                    return EquipmentSlot.Earring;
-                case "neck":
-                    return EquipmentSlot.Necklace;
-                case "wrist":
-                    return EquipmentSlot.Bracelet;
-                case "ringLeft":
-                    return EquipmentSlot.Ring1;
-                case "ringRight":
-                    return EquipmentSlot.Ring2;
+                case EquipmentSlot.MainHand:
+                    return "mainhand";
+                case EquipmentSlot.OffHand:
+                    return "offhand";
+                case EquipmentSlot.Head:
+                    return "head";
+                case EquipmentSlot.Body:
+                    return "chest";
+                case EquipmentSlot.Hands:
+                    return "hands";
+                case EquipmentSlot.Legs:
+                    return "legs";
+                case EquipmentSlot.Feet:
+                    return "feet";
+                case EquipmentSlot.Earring:
+                    return "ears";
+                case EquipmentSlot.Necklace:
+                    return "neck";
+                case EquipmentSlot.Bracelet:
+                    return "wrist";
+                case EquipmentSlot.Ring1:
+                    return "ringLeft";
+                case EquipmentSlot.Ring2:
+                    return "ringRight";
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(type), $"Unknown EquipmentSlot Type: {type}");
+                    throw new ArgumentOutOfRangeException(nameof(equipmentSlot), equipmentSlot, $"Unknown EquipmentSlot Type: {equipmentSlot}");
             }
         }
+
+        public static string AriyalaKey(this MeldInfo info) => AriyalaKey(info.EquipType);
+
+        public static string EtroKey(this EquipmentSlot equipmentSlot)
+        {
+            switch (equipmentSlot)
+            {
+                case EquipmentSlot.MainHand:
+                    return "weapon";
+                case EquipmentSlot.OffHand:
+                    return "offHand";
+                case EquipmentSlot.Head:
+                    return "head";
+                case EquipmentSlot.Body:
+                    return "body";
+                case EquipmentSlot.Hands:
+                    return "hands";
+                case EquipmentSlot.Legs:
+                    return "legs";
+                case EquipmentSlot.Feet:
+                    return "feet";
+                case EquipmentSlot.Earring:
+                    return "ears";
+                case EquipmentSlot.Necklace:
+                    return "neck";
+                case EquipmentSlot.Bracelet:
+                    return "wrist";
+                case EquipmentSlot.Ring1:
+                    return "fingerL";
+                case EquipmentSlot.Ring2:
+                    return "fingerR";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(equipmentSlot), equipmentSlot, $"Unknown EquipmentSlot Type: {equipmentSlot}");
+            }
+        }
+
+        public static string EtroKey(this MeldInfo info) => EtroKey(info.EquipType);
 
         private static readonly Regex CondensedNameRegex = new Regex(@"^(?:(?:Craftsman's|Gatherer's) )?(?<name>(?:[A-Za-z']+ ?){1,2}) Materia (?<rNumTier>[IVXLCDM]+)$");
 

@@ -1,64 +1,55 @@
-﻿using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Windows.Forms;
+using ff14bot.Enums;
 
 namespace AutoMelder.MeldingLogic
 {
     public class MeldRequest
     {
-        public MeldInfo MainHand { get; } = new MeldInfo("mainhand");
+        public MeldInfo MainHand { get; } = new MeldInfo(EquipmentSlot.MainHand);
         
-        public MeldInfo OffHand { get; } = new MeldInfo("offhand");
+        public MeldInfo OffHand { get; } = new MeldInfo(EquipmentSlot.OffHand);
         
-        public MeldInfo Head { get; } = new MeldInfo("head");
+        public MeldInfo Head { get; } = new MeldInfo(EquipmentSlot.Head);
         
-        public MeldInfo Chest { get; } = new MeldInfo("chest");
+        public MeldInfo Chest { get; } = new MeldInfo(EquipmentSlot.Body);
         
-        public MeldInfo Hands { get; } = new MeldInfo("hands");
+        public MeldInfo Hands { get; } = new MeldInfo(EquipmentSlot.Hands);
         
-        public MeldInfo Legs { get; } = new MeldInfo("legs");
+        public MeldInfo Legs { get; } = new MeldInfo(EquipmentSlot.Legs);
         
-        public MeldInfo Feet { get; } = new MeldInfo("feet");
+        public MeldInfo Feet { get; } = new MeldInfo(EquipmentSlot.Feet);
         
-        public MeldInfo Ears { get; } = new MeldInfo("ears");
+        public MeldInfo Ears { get; } = new MeldInfo(EquipmentSlot.Earring);
         
-        public MeldInfo Neck { get; } = new MeldInfo("neck");
+        public MeldInfo Neck { get; } = new MeldInfo(EquipmentSlot.Necklace);
         
-        public MeldInfo Wrist { get; } = new MeldInfo("wrist");
+        public MeldInfo Wrist { get; } = new MeldInfo(EquipmentSlot.Bracelet);
         
-        public MeldInfo RingLeft { get; } = new MeldInfo("ringLeft");
+        public MeldInfo RingLeft { get; } = new MeldInfo(EquipmentSlot.Ring1);
         
-        public MeldInfo RingRight { get; } = new MeldInfo("ringRight");
-
-        public void SetAllInfo(JToken info)
-        {
-            MainHand.SetInfo(info);
-            OffHand.SetInfo(info);
-            Head.SetInfo(info);
-            Chest.SetInfo(info);
-            Hands.SetInfo(info);
-            Legs.SetInfo(info);
-            Feet.SetInfo(info);
-            Ears.SetInfo(info);
-            Neck.SetInfo(info);
-            Wrist.SetInfo(info);
-            RingLeft.SetInfo(info);
-            RingRight.SetInfo(info);
-        }
+        public MeldInfo RingRight { get; } = new MeldInfo(EquipmentSlot.Ring2);
 
         public void SetAllTextBoxes(Form settingsForm)
         {
-            MainHand.SetTextBoxes(settingsForm);
-            OffHand.SetTextBoxes(settingsForm);
-            Head.SetTextBoxes(settingsForm);
-            Chest.SetTextBoxes(settingsForm);
-            Hands.SetTextBoxes(settingsForm);
-            Legs.SetTextBoxes(settingsForm);
-            Feet.SetTextBoxes(settingsForm);
-            Ears.SetTextBoxes(settingsForm);
-            Neck.SetTextBoxes(settingsForm);
-            Wrist.SetTextBoxes(settingsForm);
-            RingLeft.SetTextBoxes(settingsForm);
-            RingRight.SetTextBoxes(settingsForm);
+            foreach (MeldInfo meldInfo in GetAllMelds())
+            {
+                meldInfo.SetTextBoxes(settingsForm);
+            }
         }
+
+        public IEnumerable<MeldInfo> GetAllMelds()
+        {
+            foreach (PropertyInfo propInfo in GetType().GetProperties())
+            {
+                if (propInfo.GetValue(this) is MeldInfo meldInfo)
+                {
+                    yield return meldInfo;
+                }
+            }
+        }
+
+        public static readonly MeldRequest Empty = new MeldRequest();
     }
 }

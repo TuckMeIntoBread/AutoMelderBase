@@ -53,8 +53,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ariyala\MateriaParser.cs" />
-    <Compile Include="Ariyala\Parser.cs" />
+    <Compile Include="Ariyala\AriyalaParser.cs" />
     <Compile Include="AutoMelderBase.cs" />
     <Compile Include="AutoMelderSettings.cs">
       <SubType>Form</SubType>
@@ -62,9 +61,12 @@
     <Compile Include="AutoMelderSettings.Designer.cs">
       <DependentUpon>AutoMelderSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Etro\EtroParser.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="MateriaParser.cs" />
     <Compile Include="MeldingLogic\MeldInfo.cs" />
     <Compile Include="MeldingLogic\MeldRequest.cs" />
+    <Compile Include="MeldLinkParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AutoMelderSettings.resx">

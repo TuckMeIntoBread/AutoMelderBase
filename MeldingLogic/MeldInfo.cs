@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AutoMelder.Ariyala;
 using ff14bot.Enums;
 using ff14bot.Managers;
 using LlamaLibrary.JsonObjects;
-using Newtonsoft.Json.Linq;
-using static AutoMelder.Extensions;
 
 namespace AutoMelder.MeldingLogic
 {
     public class MeldInfo
     {
-        public string Type { get; }
+        public EquipmentSlot EquipType { get; }
         
         public uint ItemId { get; set; }
 
-        public BagSlot EquipSlot => InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[GetSlotByType(Type)];
+        public BagSlot EquipSlot => InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[EquipType];
 
         public string ItemName => DataManager.GetItem(ItemId)?.CurrentLocaleName;
         
@@ -33,7 +29,7 @@ namespace AutoMelder.MeldingLogic
 
         public void SetTextBoxes(Form settingsForm)
         {
-            foreach (TextBox textBox in settingsForm.GetAllControls().OfType<TextBox>().Where(x => x.Name.StartsWith(Type) && x.Name.Contains("Materia")))
+            foreach (TextBox textBox in settingsForm.GetAllControls().OfType<TextBox>().Where(x => x.Name.StartsWith(EquipType.AriyalaKey()) && x.Name.Contains("Materia")))
             {
                 if (textBox.Name.EndsWith("1")) textBox.Text = Slot1?.ToFullString() ?? "None";
                 if (textBox.Name.EndsWith("2")) textBox.Text = Slot2?.ToFullString() ?? "None";
@@ -43,27 +39,7 @@ namespace AutoMelder.MeldingLogic
             }
         }
 
-        public bool IsItemMismatched() => ItemId != (EquipSlot?.RawItemId ?? 0);
-
-        public void SetInfo(JToken info)
-        {
-            if (info["items"][Type] == null) return;
-            ItemId = info["items"][Type].Value<uint>();
-            JToken materiaInfo = info["materiaData"][$"{Type}-{ItemId}"];
-            if (materiaInfo == null || !materiaInfo.HasValues) return;
-            var stringList = new List<string>();
-            foreach (JToken stringToken in materiaInfo)
-            {
-                stringList.Add(stringToken.Value<string>());
-            }
-            for (int i = 0; i < stringList.Count; i++)
-            {
-                MateriaItem materia = MateriaParser.GetMateriaItem(stringList[i]);
-                SetSlot(i, materia);
-            }
-        }
-
-        private void SetSlot(int index, MateriaItem materia)
+        internal void SetSlot(int index, MateriaItem materia)
         {
             switch (index)
             {
@@ -100,13 +76,13 @@ namespace AutoMelder.MeldingLogic
                 case 4:
                     return Slot5;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(index), $"{index} is out of range for materia slots! Valid range 0-4");
+                    throw new ArgumentOutOfRangeException(nameof(index), index, $"{index} is out of range for materia slots! Valid range 0-4");
             }
         }
 
-        public MeldInfo(string type)
+        public MeldInfo(EquipmentSlot equipType)
         {
-            Type = type;
+            EquipType = equipType;
         }
     }
 }

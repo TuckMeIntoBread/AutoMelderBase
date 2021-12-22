@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using AutoMelder.MeldingLogic;
 using ff14bot.Enums;
 using ff14bot.Managers;
+using LlamaLibrary.Extensions;
+using LlamaLibrary.JsonObjects;
 
 namespace AutoMelder
 {
@@ -14,73 +16,67 @@ namespace AutoMelder
             InitializeComponent();
         }
 
-        public MeldRequest MeldRequest = new MeldRequest();
+        public MeldRequest MeldRequest = MeldRequest.Empty;
 
         private void ImportButton_Click(object sender, EventArgs e)
         {
-            MeldRequest = Ariyala.Parser.GetAriyalaMeldInfo(ariyalaCodeBox.Text);
+            MeldRequest = MeldLinkParser.ParseLinkOrId(ariyalaCodeBox.Text);
             MeldRequest.SetAllTextBoxes(this);
             Refresh();
             CheckItemMismatch();
-            // TODO: Add check for materia mismatch.
+            CheckMateriaMismatch();
         }
 
         private void CheckItemMismatch()
         {
             StringBuilder sb = new StringBuilder();
             Bag equipSlots = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems);
-            if (MeldRequest.MainHand?.IsItemMismatched() ?? false)
+            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
             {
-                sb.AppendLine($"MainHand Mismatch: {MeldRequest.MainHand.ItemName} - {equipSlots[EquipmentSlot.MainHand]?.Name}");
+                if (meldInfo.ItemId > 0 && meldInfo.ItemId != (equipSlots[meldInfo.EquipType]?.RawItemId ?? 0))
+                {
+                    sb.AppendLine($"{meldInfo.EquipType.ToString()} Mismatch!");
+                    sb.AppendLine($"{meldInfo.ItemName} - {equipSlots[meldInfo.EquipType].Name}");
+                    sb.Append(Environment.NewLine);
+                }
             }
-            if (MeldRequest.OffHand?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"OffHand Mismatch: {MeldRequest.OffHand.ItemName} - {equipSlots[EquipmentSlot.OffHand]?.Name}");
-            }
-            if (MeldRequest.Head?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Head Mismatch: {MeldRequest.Head.ItemName} - {equipSlots[EquipmentSlot.Head]?.Name}");
-            }
-            if (MeldRequest.Chest?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Chest Mismatch: {MeldRequest.Chest.ItemName} - {equipSlots[EquipmentSlot.Body]?.Name}");
-            }
-            if (MeldRequest.Hands?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Hands Mismatch: {MeldRequest.Hands.ItemName} - {equipSlots[EquipmentSlot.Hands]?.Name}");
-            }
-            if (MeldRequest.Legs?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Legs Mismatch: {MeldRequest.Legs.ItemName} - {equipSlots[EquipmentSlot.Legs]?.Name}");
-            }
-            if (MeldRequest.Feet?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Feet Mismatch: {MeldRequest.Feet.ItemName} - {equipSlots[EquipmentSlot.Feet]?.Name}");
-            }
-            if (MeldRequest.Ears?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Ears Mismatch: {MeldRequest.Ears.ItemName} - {equipSlots[EquipmentSlot.Earring]?.Name}");
-            }
-            if (MeldRequest.Neck?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Neck Mismatch: {MeldRequest.Neck.ItemName} - {equipSlots[EquipmentSlot.Necklace]?.Name}");
-            }
-            if (MeldRequest.Wrist?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"Wrist Mismatch: {MeldRequest.Wrist.ItemName} - {equipSlots[EquipmentSlot.Bracelet]?.Name}");
-            }
-            if (MeldRequest.RingLeft?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"RingLeft Mismatch: {MeldRequest.RingLeft.ItemName} - {equipSlots[EquipmentSlot.Ring1]?.Name}");
-            }
-            if (MeldRequest.RingRight?.IsItemMismatched() ?? false)
-            {
-                sb.AppendLine($"RingRight Mismatch: {MeldRequest.RingRight.ItemName} - {equipSlots[EquipmentSlot.Ring2]?.Name}");
-            }
-
             if (sb.Length > 0)
             {
                 MessageBox.Show(sb.ToString(), "Item Mismatch!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void CheckMateriaMismatch()
+        {
+            StringBuilder sb = new StringBuilder();
+            Bag equipSlots = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems);
+            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
+            {
+                if (meldInfo.ItemId == 0) continue;
+                BagSlot equippedItem = equipSlots[meldInfo.EquipType];
+                if (equippedItem == null || !equippedItem.IsValid || !equippedItem.IsFilled) continue;
+                var meldedMateria = equippedItem.Materia();
+                if (meldedMateria.Count == 0) continue;
+                bool appendedItem = false;
+                for (int i = 0; i < meldedMateria.Count; i++)
+                {
+                    MateriaItem currentMateria = meldedMateria[i];
+                    MateriaItem desiredMateria = meldInfo.GetSlotByIndex(i);
+                    if (desiredMateria == null || currentMateria.Key == desiredMateria.Key) continue;
+                    if (!appendedItem)
+                    {
+                        sb.AppendLine($"{equippedItem.Name} Materia Mismatch!");
+                        appendedItem = true;
+                    }
+
+                    sb.AppendLine($"#{i+1}: {desiredMateria.ToFullString()} - {currentMateria.ToFullString()}");
+                }
+
+                if (appendedItem) sb.Append(Environment.NewLine);
+            }
+            if (sb.Length > 0)
+            {
+                MessageBox.Show(sb.ToString(), "Materia Mismatch!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
