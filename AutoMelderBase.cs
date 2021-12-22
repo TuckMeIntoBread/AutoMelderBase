@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -7,6 +8,7 @@ using Buddy.Coroutines;
 using ff14bot;
 using ff14bot.AClasses;
 using ff14bot.Behavior;
+using ff14bot.Enums;
 using ff14bot.Managers;
 using LlamaLibrary.Extensions;
 using LlamaLibrary.JsonObjects;
@@ -65,66 +67,94 @@ namespace AutoMelder
             if (_isDone) return false;
             _lastValidItem = 0;
             _lastValidMateria = 0;
+            StopMeldingSet.Clear();
             if (_settings?.MeldRequest == null)
             {
                 Log.Error("Nothing imported!");
+                _isDone = true;
                 TreeRoot.Stop();
                 return false;
             }
             MeldRequest meldRequest = _settings.MeldRequest;
-            await MeldItem(meldRequest.Head);
-            await MeldItem(meldRequest.Chest);
-            await MeldItem(meldRequest.Hands);
-            await MeldItem(meldRequest.Legs);
-            await MeldItem(meldRequest.Feet);
-            await MeldItem(meldRequest.Ears);
-            await MeldItem(meldRequest.Neck);
-            await MeldItem(meldRequest.Wrist);
-            await MeldItem(meldRequest.RingLeft);
-            await MeldItem(meldRequest.RingRight);
-            await MeldItem(meldRequest.MainHand);
-            await MeldItem(meldRequest.OffHand);
+            // Meld all first slots (guaranteed success).
+            foreach (MeldInfo meldInfo in meldRequest.GetAllMelds())
+            {
+                await MeldItemBySlot(meldInfo, 0);
+            }
+            
+            // Meld all second slots in pieces that are 2nd slot guaranteed (left side pieces).
+            foreach (MeldInfo meldInfo in meldRequest.GetAllTwoSlotGuaranteedMelds())
+            {
+                await MeldItemBySlot(meldInfo, 1);
+            }
+            
+            // Meld remaining slots in non-MH/OH.
+            for (int i = 1; i < 5; i++)
+            {
+                foreach (MeldInfo meldInfo in meldRequest.GetNonToolsMelds())
+                {
+                    await MeldItemBySlot(meldInfo, i);
+                }
+            }
+            
+            // Meld MH/OH.
+            for (int i = 1; i < 5; i++)
+            {
+                foreach (MeldInfo meldInfo in meldRequest.GetToolsMelds())
+                {
+                    await MeldItemBySlot(meldInfo, i);
+                }
+            }
 
             _isDone = true;
             TreeRoot.Stop("Done melding materia.");
             return false;
         }
 
-        private static async Task MeldItem(MeldInfo meldInfo)
+        private static readonly HashSet<EquipmentSlot> StopMeldingSet = new HashSet<EquipmentSlot>();
+
+        private static async Task MeldItemBySlot(MeldInfo meldInfo, int index)
         {
-            BagSlot equipSlot = meldInfo?.EquipSlot;
+            if (index >= 5) return;
+            MateriaItem materiaToMeld = meldInfo?.GetSlotByIndex(index);
+            if (materiaToMeld == null || StopMeldingSet.Contains(meldInfo.EquipType)) return;
+            BagSlot equipSlot = meldInfo.EquipSlot;
             if (equipSlot == null || !equipSlot.IsValid || !equipSlot.IsFilled) return;
             int alreadyMeldedCount = equipSlot.MateriaCount();
-            if (alreadyMeldedCount >= 5 || meldInfo.GetSlotByIndex(0) == null) return;
-            Log.Debug($"Trying to affix materia to {equipSlot.Name}");
-            for (int i = alreadyMeldedCount; i < 5; i++)
+            if (alreadyMeldedCount > index) return;
+            Log.Information($"Trying to affix materia to {equipSlot.Name}'s Slot #{index+1}");
+            await Coroutine.Sleep(800);
+            BagSlot materiaSlot = GetMateriaSlot(materiaToMeld);
+            if (materiaSlot == null || !materiaSlot.IsValid || !materiaSlot.IsFilled)
             {
-                await Coroutine.Sleep(800);
-                MateriaItem materiaToMeld = meldInfo.GetSlotByIndex(i);
-                if (materiaToMeld == null) break;
-                BagSlot materiaSlot = GetMateriaSlot(materiaToMeld);
-                if (materiaSlot == null || !materiaSlot.IsValid || !materiaSlot.IsFilled)
+                Log.Error($"We don't have any {materiaToMeld.ToFullString()} to meld {equipSlot.Name}'s Slot #{index+1} with!");
+                StopMeldingSet.Add(meldInfo.EquipType);
+                return;
+            }
+
+            if (!await TryAffixMateria(equipSlot, materiaSlot)) return;
+            await Coroutine.Sleep(800);
+            var alreadyMeldedInfo = equipSlot.Materia();
+            if (alreadyMeldedInfo.Count <= index)
+            {
+                if (!materiaSlot.IsValid || !materiaSlot.IsFilled || materiaSlot.Count == 0)
                 {
-                    Log.Error($"We don't have any {materiaToMeld.ToFullString()} to meld {equipSlot.Name}'s Slot #{i+1} with!");
+                    Log.Warning($"Failed to meld! We've ran out of {materiaToMeld.ToFullString()}");
+                    StopMeldingSet.Add(meldInfo.EquipType);
                     return;
                 }
 
-                if (!await TryAffixMateria(equipSlot, materiaSlot)) return;
-                await Coroutine.Sleep(800);
-                var alreadyMeldedInfo = equipSlot.Materia();
-                if (alreadyMeldedInfo.Count <= i)
-                {
-                    Log.Error("Failed to meld materia! Maybe we're out?");
-                    return;
-                }
+                Log.Error("Failed to meld materia! Unknown reason?");
+                StopMeldingSet.Add(meldInfo.EquipType);
+                return;
+            }
 
-                if (alreadyMeldedInfo[i].Key != materiaToMeld.Key)
-                {
-                    Log.Error("Last materia melded doesn't match what we were supposed to meld! Oops...");
-                    _isDone = true;
-                    TreeRoot.Stop();
-                    return;
-                }
+            if (alreadyMeldedInfo[index].Key != materiaToMeld.Key)
+            {
+                Log.Error("Last materia melded doesn't match what we were supposed to meld! Oops...");
+                _isDone = true;
+                TreeRoot.Stop("Melded Wrong Materia");
+                return;
             }
 
             if (MateriaAttach.Instance.IsOpen)
@@ -230,6 +260,7 @@ namespace AutoMelder
 
         public override void Stop()
         {
+            _isDone = true;
             _root = null;
         }
     }

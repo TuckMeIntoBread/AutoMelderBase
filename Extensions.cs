@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using AutoMelder.Ariyala;
 using AutoMelder.MeldingLogic;
 using ff14bot.Enums;
+using ff14bot.Managers;
 using LlamaLibrary.JsonObjects;
 using Newtonsoft.Json.Linq;
 
@@ -100,6 +101,34 @@ namespace AutoMelder
         public static string EtroKey(this MeldInfo info) => EtroKey(info.EquipType);
 
         private static readonly Regex CondensedNameRegex = new Regex(@"^(?:(?:Craftsman's|Gatherer's) )?(?<name>(?:[A-Za-z']+ ?){1,2}) Materia (?<rNumTier>[IVXLCDM]+)$");
+
+        public static bool IsTwoSlotGuaranteed(this BagSlot equipment)
+        {
+            return equipment.Item.MateriaSlots == 2;
+        }
+
+        public static bool IsTwoSlotGuaranteed(this EquipmentSlot equipmentSlot)
+        {
+            switch (equipmentSlot)
+            {
+                case EquipmentSlot.MainHand:
+                case EquipmentSlot.OffHand:
+                case EquipmentSlot.Earring:
+                case EquipmentSlot.Necklace:
+                case EquipmentSlot.Bracelet:
+                case EquipmentSlot.Ring1:
+                case EquipmentSlot.Ring2:
+                    return false;
+                case EquipmentSlot.Head:
+                case EquipmentSlot.Body:
+                case EquipmentSlot.Hands:
+                case EquipmentSlot.Legs:
+                case EquipmentSlot.Feet:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(equipmentSlot), equipmentSlot, $"Unknown EquipmentSlot Type: {equipmentSlot}");
+            }
+        }
 
         public static string ToFullString(this MateriaItem materiaItem)
         {

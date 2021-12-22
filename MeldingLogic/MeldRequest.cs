@@ -49,6 +49,39 @@ namespace AutoMelder.MeldingLogic
                 }
             }
         }
+        
+        public IEnumerable<MeldInfo> GetAllTwoSlotGuaranteedMelds()
+        {
+            foreach (PropertyInfo propInfo in GetType().GetProperties())
+            {
+                if (propInfo.GetValue(this) is MeldInfo meldInfo)
+                {
+                    if (meldInfo.EquipType.IsTwoSlotGuaranteed()) yield return meldInfo;
+                }
+            }
+        }
+
+        public IEnumerable<MeldInfo> GetNonToolsMelds()
+        {
+            foreach (PropertyInfo propInfo in GetType().GetProperties())
+            {
+                if (propInfo.GetValue(this) is MeldInfo meldInfo)
+                {
+                    if (meldInfo.EquipType != EquipmentSlot.MainHand && meldInfo.EquipType != EquipmentSlot.OffHand) yield return meldInfo;
+                }
+            }
+        }
+        
+        public IEnumerable<MeldInfo> GetToolsMelds()
+        {
+            foreach (PropertyInfo propInfo in GetType().GetProperties())
+            {
+                if (propInfo.GetValue(this) is MeldInfo meldInfo)
+                {
+                    if (meldInfo.EquipType == EquipmentSlot.MainHand || meldInfo.EquipType == EquipmentSlot.OffHand) yield return meldInfo;
+                }
+            }
+        }
 
         public static readonly MeldRequest Empty = new MeldRequest();
     }

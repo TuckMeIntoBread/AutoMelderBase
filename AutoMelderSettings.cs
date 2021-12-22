@@ -16,7 +16,7 @@ namespace AutoMelder
             InitializeComponent();
         }
 
-        public MeldRequest MeldRequest = MeldRequest.Empty;
+        public MeldRequest MeldRequest;
 
         private void ImportButton_Click(object sender, EventArgs e)
         {
