@@ -81,6 +81,6 @@ namespace AutoMelder
             return specificMateria;
         }
 
-        public static MateriaItem GetMateriaFromId(uint materiaId) => MateriaList.SelectMany(x => x.Value).First(x => x.Key == materiaId);
+        public static MateriaItem GetMateriaFromId(int materiaId) => MateriaList.SelectMany(x => x.Value).First(x => x.Key == materiaId);
     }
 }

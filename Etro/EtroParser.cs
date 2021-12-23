@@ -33,12 +33,12 @@ namespace AutoMelder.Etro
             uint itemId = info[meld.EtroKey()]?.Value<uint>() ?? 0;
             if (itemId == 0) return;
             meld.ItemId = itemId;
-            JToken materiaInfo = info[itemId];
+            JToken materiaInfo = info[itemId.ToString()];
             if (materiaInfo == null || !materiaInfo.HasValues) return;
-            var materiaIds = new List<uint>();
+            var materiaIds = new List<int>();
             foreach (JToken jToken in materiaInfo.Values())
             {
-                materiaIds.Add(jToken.Value<uint>());
+                materiaIds.Add(jToken.Value<int>());
             }
             for (int i = 0; i < materiaIds.Count; i++)
             {
