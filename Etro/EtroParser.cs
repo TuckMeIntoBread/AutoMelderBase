@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
 using AutoMelder.MeldingLogic;
+using ff14bot.Enums;
 using LlamaLibrary.JsonObjects;
 using LlamaLibrary.Logging;
 using Newtonsoft.Json.Linq;
@@ -30,10 +31,26 @@ namespace AutoMelder.Etro
 
         public static void SetEtroInfo(this MeldInfo meld, JObject info)
         {
-            uint itemId = info[meld.EtroKey()]?.Value<uint>() ?? 0;
+            JToken itemToken = info[meld.EtroKey()];
+            if (itemToken == null || itemToken.Type == JTokenType.Null) return;
+            uint itemId = itemToken.Value<uint>();
             if (itemId == 0) return;
             meld.ItemId = itemId;
-            JToken materiaInfo = info[itemId.ToString()];
+            string materiaString;
+            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+            switch (meld.EquipType)
+            {
+                case EquipmentSlot.Ring1:
+                    materiaString = $"{itemId.ToString()}L";
+                    break;
+                case EquipmentSlot.Ring2:
+                    materiaString = $"{itemId.ToString()}R";
+                    break;
+                default:
+                    materiaString = itemId.ToString();
+                    break;
+            }
+            JToken materiaInfo = info["materia"]?[materiaString];
             if (materiaInfo == null || !materiaInfo.HasValues) return;
             var materiaIds = new List<int>();
             foreach (JToken jToken in materiaInfo.Values())

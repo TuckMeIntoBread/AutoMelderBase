@@ -88,7 +88,7 @@ namespace AutoMelder
                 case EquipmentSlot.Necklace:
                     return "neck";
                 case EquipmentSlot.Bracelet:
-                    return "wrist";
+                    return "wrists";
                 case EquipmentSlot.Ring1:
                     return "fingerL";
                 case EquipmentSlot.Ring2:
