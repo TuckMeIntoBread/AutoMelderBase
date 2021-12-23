@@ -830,18 +830,18 @@ namespace AutoMelder
             // 
             // importButton
             // 
-            this.importButton.Location = new System.Drawing.Point(601, 802);
+            this.importButton.Location = new System.Drawing.Point(476, 775);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(98, 24);
             this.importButton.TabIndex = 16;
-            this.importButton.Text = "Ariyala Import";
+            this.importButton.Text = "Import Link";
             this.importButton.UseVisualStyleBackColor = true;
             this.importButton.Click += new System.EventHandler(this.ImportButton_Click);
             // 
             // estimateButton
             // 
             this.estimateButton.Enabled = false;
-            this.estimateButton.Location = new System.Drawing.Point(601, 772);
+            this.estimateButton.Location = new System.Drawing.Point(601, 775);
             this.estimateButton.Name = "estimateButton";
             this.estimateButton.Size = new System.Drawing.Size(98, 24);
             this.estimateButton.TabIndex = 18;
@@ -852,7 +852,7 @@ namespace AutoMelder
             // 
             this.ariyalaCodeBox.Location = new System.Drawing.Point(476, 805);
             this.ariyalaCodeBox.Name = "ariyalaCodeBox";
-            this.ariyalaCodeBox.Size = new System.Drawing.Size(119, 20);
+            this.ariyalaCodeBox.Size = new System.Drawing.Size(223, 20);
             this.ariyalaCodeBox.TabIndex = 19;
             // 
             // AutoMelderSettings
@@ -906,6 +906,7 @@ namespace AutoMelder
             this.wristGBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
