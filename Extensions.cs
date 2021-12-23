@@ -140,5 +140,81 @@ namespace AutoMelder
             }
             return $"{materiaItem.ItemName} {materiaItem.Stat} +{materiaItem.Value}";
         }
+
+        public static string ToShortJobString(this string jobString)
+        {
+            switch (jobString.ToLower())
+            {
+                case "carpenter":
+                    return "CRP";
+                case "blacksmith":
+                    return "BLM";
+                case "armorer":
+                    return "ARM";
+                case "goldsmith":
+                    return "GSM";
+                case "leatherworker":
+                    return "LTW";
+                case "weaver":
+                    return "WVR";
+                case "alchemist":
+                    return "ALC";
+                case "culinarian":
+                    return "CUL";
+                case "miner":
+                    return "MIN";
+                case "botanist":
+                    return "BTN";
+                case "fisher":
+                    return "FSH";
+                case "paladin":
+                    return "PLD";
+                case "warrior":
+                    return "WAR";
+                case "darkknight":
+                case "dark knight":
+                    return "DRK";
+                case "gunbreaker":
+                    return "GNB";
+                case "monk":
+                    return "MNK";
+                case "dragoon":
+                    return "DRG";
+                case "ninja":
+                    return "NIN";
+                case "samurai":
+                    return "SAM";
+                case "reaper":
+                    return "RPR";
+                case "whitemage":
+                case "white mage":
+                    return "WHM";
+                case "astrologian":
+                    return "AST";
+                case "scholar":
+                    return "SCH";
+                case "sage":
+                    return "SGE";
+                case "bard":
+                    return "BRD";
+                case "machinist":
+                    return "MCH";
+                case "dancer":
+                    return "DNC";
+                case "blackmage":
+                case "black mage":
+                    return "BLM";
+                case "summoner":
+                    return "SMN";
+                case "redmage":
+                case "red mage":
+                    return "RDM";
+                case "bluemage":
+                case "blue mage":
+                    return "BLU";
+                default:
+                    return jobString;
+            }
+        }
     }
 }

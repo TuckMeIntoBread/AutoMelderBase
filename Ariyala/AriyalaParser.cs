@@ -19,7 +19,12 @@ namespace AutoMelder.Ariyala
             if (!MeldLinkParser.TryGetResponse(uri, out JObject ariyalaResponse)) return MeldRequest.Empty;
 
             var dataset = ariyalaResponse["content"].Value<string>();
-            JToken info = ariyalaResponse["datasets"][dataset]["normal"];
+            JToken info = ariyalaResponse["datasets"][dataset.ToShortJobString()]?["normal"];
+            if (info == null)
+            {
+                Log.Error($"Couldn't parse dataset {dataset}! Try using a different/newer ariyala link, or using an etro.gg link instead.");
+                return MeldRequest.Empty;
+            }
             MeldRequest meldRequest = new MeldRequest();
             foreach (MeldInfo meldInfo in meldRequest.GetAllMelds())
             {
