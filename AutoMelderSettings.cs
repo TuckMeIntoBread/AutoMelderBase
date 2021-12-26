@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using AutoMelder.MeldingLogic;
@@ -82,8 +83,39 @@ namespace AutoMelder
 
         private void AmountEstimate_Click(object sender, EventArgs e)
         {
-            // TODO: Add estimated amounts of materia needed.
-            MessageBox.Show("WIP", "Not Ready Yet");
+            var materiaCounts = new Dictionary<MateriaItem, int>();
+            void IncreaseCount(MateriaItem materia, int count)
+            {
+                if (materiaCounts.ContainsKey(materia))
+                {
+                    materiaCounts[materia] += count;
+                }
+                else
+                {
+                    materiaCounts[materia] = count;
+                }
+            }
+            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
+            {
+                if (meldInfo.ItemId == 0) continue;
+                int currentCount = meldInfo.EquipSlot.MateriaCount();
+                for (int i = currentCount; i < 5; i++)
+                {
+                    MateriaItem desiredMateria = meldInfo.GetSlotByIndex(i);
+                    float meldChance = meldInfo.GetOvermeldChance(i);
+                    var materiaNeeded = (int)Math.Ceiling(100 / meldChance);
+                    IncreaseCount(desiredMateria, materiaNeeded);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var materiaCount in materiaCounts)
+            {
+                sb.AppendLine($"{materiaCount.Key.ToFullString()} x{materiaCount.Value}");
+            }
+
+            sb.AppendLine("Only accounts for current MH/OH!");
+            MessageBox.Show(sb.ToString(), "Estimated Materia Needed", MessageBoxButtons.OK);
         }
     }
 }

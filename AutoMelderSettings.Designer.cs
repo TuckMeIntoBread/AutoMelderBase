@@ -840,13 +840,13 @@ namespace AutoMelder
             // 
             // estimateButton
             // 
-            this.estimateButton.Enabled = false;
             this.estimateButton.Location = new System.Drawing.Point(601, 775);
             this.estimateButton.Name = "estimateButton";
             this.estimateButton.Size = new System.Drawing.Size(98, 24);
             this.estimateButton.TabIndex = 18;
             this.estimateButton.Text = "Amount Estimate";
             this.estimateButton.UseVisualStyleBackColor = true;
+            this.estimateButton.Click += new System.EventHandler(this.AmountEstimate_Click);
             // 
             // ariyalaCodeBox
             // 
@@ -906,7 +906,6 @@ namespace AutoMelder
             this.wristGBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

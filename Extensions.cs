@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using AutoMelder.Ariyala;
 using AutoMelder.MeldingLogic;
 using ff14bot.Enums;
-using ff14bot.Managers;
 using LlamaLibrary.JsonObjects;
-using Newtonsoft.Json.Linq;
 
 namespace AutoMelder
 {
@@ -102,34 +99,6 @@ namespace AutoMelder
 
         private static readonly Regex CondensedNameRegex = new Regex(@"^(?:(?:Craftsman's|Gatherer's) )?(?<name>(?:[A-Za-z']+ ?){1,2}) Materia (?<rNumTier>[IVXLCDM]+)$");
 
-        public static bool IsTwoSlotGuaranteed(this BagSlot equipment)
-        {
-            return equipment.Item.MateriaSlots == 2;
-        }
-
-        public static bool IsTwoSlotGuaranteed(this EquipmentSlot equipmentSlot)
-        {
-            switch (equipmentSlot)
-            {
-                case EquipmentSlot.MainHand:
-                case EquipmentSlot.OffHand:
-                case EquipmentSlot.Earring:
-                case EquipmentSlot.Necklace:
-                case EquipmentSlot.Bracelet:
-                case EquipmentSlot.Ring1:
-                case EquipmentSlot.Ring2:
-                    return false;
-                case EquipmentSlot.Head:
-                case EquipmentSlot.Body:
-                case EquipmentSlot.Hands:
-                case EquipmentSlot.Legs:
-                case EquipmentSlot.Feet:
-                    return true;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(equipmentSlot), equipmentSlot, $"Unknown EquipmentSlot Type: {equipmentSlot}");
-            }
-        }
-
         public static string ToFullString(this MateriaItem materiaItem)
         {
             string itemName = materiaItem.ItemName;
@@ -215,6 +184,24 @@ namespace AutoMelder
                 default:
                     return jobString;
             }
+        }
+
+        public static float GetOvermeldChance(this MateriaItem item, MeldInfo info)
+        {
+            int meldSlot = info.GetIndexBySlot(item);
+            byte guaranteedSlots = info.EquipSlot.Item.MateriaSlots;
+            int overmeldSlot = meldSlot + 1 - guaranteedSlots;
+            if (overmeldSlot <= 0) return 100f;
+            return ResourceManager.OvermeldChances.Value[overmeldSlot][item.Tier];
+        }
+
+        public static float GetOvermeldChance(this MeldInfo info, int materiaSlot)
+        {
+            byte guaranteedSlots = info.EquipSlot.Item.MateriaSlots;
+            var chanceDic = ResourceManager.OvermeldChances.Value;
+            int materiaTier = info.GetSlotByIndex(materiaSlot).Tier;
+            int overmeldSlot = materiaSlot + 1 - guaranteedSlots;
+            return chanceDic[overmeldSlot][materiaTier];
         }
     }
 }

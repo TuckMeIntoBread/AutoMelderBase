@@ -80,6 +80,16 @@ namespace AutoMelder.MeldingLogic
             }
         }
 
+        public int GetIndexBySlot(MateriaItem item)
+        {
+            if (ReferenceEquals(item, Slot1)) return 0;
+            if (ReferenceEquals(item, Slot2)) return 1;
+            if (ReferenceEquals(item, Slot3)) return 2;
+            if (ReferenceEquals(item, Slot4)) return 3;
+            if (ReferenceEquals(item, Slot5)) return 4;
+            throw new ArgumentOutOfRangeException(nameof(item), item, $"{item} didn't exist in {this}!");
+        }
+
         public MeldInfo(EquipmentSlot equipType)
         {
             EquipType = equipType;

@@ -56,7 +56,7 @@ namespace AutoMelder.MeldingLogic
             {
                 if (propInfo.GetValue(this) is MeldInfo meldInfo)
                 {
-                    if (meldInfo.EquipType.IsTwoSlotGuaranteed()) yield return meldInfo;
+                    if (meldInfo.EquipSlot?.Item?.MateriaSlots >= 2) yield return meldInfo;
                 }
             }
         }
