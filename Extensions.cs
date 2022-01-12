@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Windows.Media;
 using AutoMelder.MeldingLogic;
 using ff14bot.Enums;
+using ff14bot.Helpers;
 using LlamaLibrary.JsonObjects;
+using LlamaLibrary.Logging;
 
 namespace AutoMelder
 {
@@ -201,7 +204,17 @@ namespace AutoMelder
             var chanceDic = ResourceManager.OvermeldChances.Value;
             int materiaTier = info.GetSlotByIndex(materiaSlot).Tier;
             int overmeldSlot = materiaSlot + 1 - guaranteedSlots;
-            return chanceDic[overmeldSlot][materiaTier];
+            try
+            {
+                return chanceDic[overmeldSlot][materiaTier];
+            }
+            catch (KeyNotFoundException e)
+            {
+                Log.Error($"{overmeldSlot} or {materiaTier} not found in dictionary.{Environment.NewLine}{e}");
+                throw;
+            }
         }
+
+        private static readonly LLogger Log = new LLogger("AutoMelder", Colors.Brown);
     }
 }
