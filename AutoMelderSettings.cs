@@ -102,9 +102,21 @@ namespace AutoMelder
                 for (int i = currentCount; i < 5; i++)
                 {
                     MateriaItem desiredMateria = meldInfo.GetSlotByIndex(i);
-                    float meldChance = meldInfo.GetOvermeldChance(i);
-                    var materiaNeeded = (int)Math.Ceiling(100 / meldChance);
-                    IncreaseCount(desiredMateria, materiaNeeded);
+                    var guaranteedSlots = meldInfo.EquipSlot.Item.MateriaSlots;
+                    if (i < guaranteedSlots)
+                    {
+                        IncreaseCount(desiredMateria, 1);
+                    }
+                    else
+                    {
+                        float meldChance = meldInfo.GetOvermeldChance(i);
+                        if (meldChance == 0)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(meldChance), meldChance, "Trying to calculate meld chance for a materia that can't be overmelded into that slot!");
+                        }
+                        var materiaNeeded = (int)Math.Ceiling(100 / meldChance);
+                        IncreaseCount(desiredMateria, materiaNeeded);
+                    }
                 }
             }
 

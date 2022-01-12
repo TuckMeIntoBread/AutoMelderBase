@@ -203,14 +203,14 @@ namespace AutoMelder
             byte guaranteedSlots = info.EquipSlot.Item.MateriaSlots;
             var chanceDic = ResourceManager.OvermeldChances.Value;
             int materiaTier = info.GetSlotByIndex(materiaSlot).Tier;
-            int overmeldSlot = materiaSlot + 1 - guaranteedSlots;
+            int overmeldIndex = materiaSlot - guaranteedSlots;
             try
             {
-                return chanceDic[overmeldSlot][materiaTier];
+                return chanceDic[materiaTier][overmeldIndex];
             }
             catch (KeyNotFoundException e)
             {
-                Log.Error($"{overmeldSlot} or {materiaTier} not found in dictionary.{Environment.NewLine}{e}");
+                Log.Error($"MateriaTier {materiaTier} or OvermeldIndex {overmeldIndex} not found in dictionary. GuaranteedSlots: {guaranteedSlots}, Item: {info.EquipSlot.Item.EnglishName}{Environment.NewLine}{e}");
                 throw;
             }
         }
