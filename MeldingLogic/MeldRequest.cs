@@ -56,7 +56,10 @@ namespace AutoMelder.MeldingLogic
             {
                 if (propInfo.GetValue(this) is MeldInfo meldInfo)
                 {
-                    if (meldInfo.IsEnabled(settingsForm)) yield return meldInfo;
+                    if (meldInfo.IsValid && meldInfo.IsEnabled(settingsForm))
+                    {
+                        yield return meldInfo;
+                    }
                 }
             }
         }

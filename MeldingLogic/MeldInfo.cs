@@ -23,6 +23,19 @@ namespace AutoMelder.MeldingLogic
             return settingsForm.GetAllControls().OfType<CheckBox>().First(x => x.Name.StartsWith(EquipType.AriyalaKey()) && x.Name.EndsWith("EnabledCBox")).Checked;
         }
 
+        public bool IsValid
+        {
+            get
+            {
+                if (ItemId == 0) return false;
+                if (EquipSlot == null) return false;
+                if (!EquipSlot.IsValid || !EquipSlot.IsFilled) return false;
+                if (EquipSlot.RawItemId == 0) return false;
+                if (EquipSlot.Item.MateriaSlots == 0) return false;
+                return true;
+            }
+        }
+
         public MateriaItem Slot1 { get; set; }
         
         public MateriaItem Slot2 { get; set; }
