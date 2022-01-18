@@ -16,7 +16,13 @@ namespace AutoMelder.MeldingLogic
         public BagSlot EquipSlot => InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems)[EquipType];
 
         public string ItemName => DataManager.GetItem(ItemId)?.CurrentLocaleName;
-        
+
+        public bool IsEnabled(AutoMelderSettings settingsForm)
+        {
+            if (settingsForm.IgnoreMismatched && EquipSlot.RawItemId != ItemId) return false;
+            return settingsForm.GetAllControls().OfType<CheckBox>().First(x => x.Name.StartsWith(EquipType.AriyalaKey()) && x.Name.EndsWith("EnabledCBox")).Checked;
+        }
+
         public MateriaItem Slot1 { get; set; }
         
         public MateriaItem Slot2 { get; set; }

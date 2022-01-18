@@ -19,10 +19,13 @@ namespace AutoMelder
 
         public MeldRequest MeldRequest;
 
+        public bool IgnoreMismatched => ignoreMismatchedCBox.Checked;
+
         private void ImportButton_Click(object sender, EventArgs e)
         {
-            MeldRequest = MeldLinkParser.ParseLinkOrId(ariyalaCodeBox.Text);
+            MeldRequest = MeldLinkParser.ParseLinkOrId(importCodeBox.Text);
             MeldRequest.SetAllTextBoxes(this);
+            importCodeBox.Text = string.Empty;
             Refresh();
             CheckItemMismatch();
             CheckMateriaMismatch();
@@ -32,7 +35,7 @@ namespace AutoMelder
         {
             StringBuilder sb = new StringBuilder();
             Bag equipSlots = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems);
-            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
+            foreach (MeldInfo meldInfo in MeldRequest.AllMelds())
             {
                 if (meldInfo.ItemId > 0 && meldInfo.ItemId != (equipSlots[meldInfo.EquipType]?.RawItemId ?? 0))
                 {
@@ -51,7 +54,7 @@ namespace AutoMelder
         {
             StringBuilder sb = new StringBuilder();
             Bag equipSlots = InventoryManager.GetBagByInventoryBagId(InventoryBagId.EquippedItems);
-            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
+            foreach (MeldInfo meldInfo in MeldRequest.AllMelds())
             {
                 if (meldInfo.ItemId == 0) continue;
                 BagSlot equippedItem = equipSlots[meldInfo.EquipType];
@@ -95,7 +98,7 @@ namespace AutoMelder
                     materiaCounts[materia] = count;
                 }
             }
-            foreach (MeldInfo meldInfo in MeldRequest.GetAllMelds())
+            foreach (MeldInfo meldInfo in MeldRequest.AllEnabledMelds(this))
             {
                 if (meldInfo.ItemId == 0) continue;
                 int currentCount = meldInfo.EquipSlot.MateriaCount();

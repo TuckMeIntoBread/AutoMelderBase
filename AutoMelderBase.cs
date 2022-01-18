@@ -76,22 +76,20 @@ namespace AutoMelder
                 return false;
             }
             MeldRequest meldRequest = _settings.MeldRequest;
-            // Meld all first slots (guaranteed success).
-            foreach (MeldInfo meldInfo in meldRequest.GetAllMelds())
+            // Meld all guaranteed slots.
+            foreach (MeldInfo meldInfo in meldRequest.AllEnabledMelds(_settings))
             {
-                await MeldItemBySlot(meldInfo, 0);
+                byte guaranteedSlots = meldInfo.EquipSlot.Item.MateriaSlots;
+                for (int i = meldInfo.EquipSlot.MateriaCount(); i < guaranteedSlots; i++)
+                {
+                    await MeldItemBySlot(meldInfo, i);
+                }
             }
-            
-            // Meld all second slots in pieces that are 2nd slot guaranteed (left side pieces).
-            foreach (MeldInfo meldInfo in meldRequest.GetAllTwoSlotGuaranteedMelds())
-            {
-                await MeldItemBySlot(meldInfo, 1);
-            }
-            
+
             // Meld remaining slots in non-MH/OH.
             for (int i = 1; i < 5; i++)
             {
-                foreach (MeldInfo meldInfo in meldRequest.GetNonToolsMelds())
+                foreach (MeldInfo meldInfo in meldRequest.AllEnabledMelds(_settings).Where(x => x.EquipType != EquipmentSlot.MainHand && x.EquipType != EquipmentSlot.OffHand))
                 {
                     await MeldItemBySlot(meldInfo, i);
                 }
@@ -100,7 +98,7 @@ namespace AutoMelder
             // Meld MH/OH.
             for (int i = 1; i < 5; i++)
             {
-                foreach (MeldInfo meldInfo in meldRequest.GetToolsMelds())
+                foreach (MeldInfo meldInfo in meldRequest.AllEnabledMelds(_settings).Where(x => x.EquipType == EquipmentSlot.MainHand || x.EquipType == EquipmentSlot.OffHand))
                 {
                     await MeldItemBySlot(meldInfo, i);
                 }

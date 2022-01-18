@@ -33,13 +33,13 @@ namespace AutoMelder.MeldingLogic
 
         public void SetAllTextBoxes(Form settingsForm)
         {
-            foreach (MeldInfo meldInfo in GetAllMelds())
+            foreach (MeldInfo meldInfo in AllMelds())
             {
                 meldInfo.SetTextBoxes(settingsForm);
             }
         }
 
-        public IEnumerable<MeldInfo> GetAllMelds()
+        public IEnumerable<MeldInfo> AllMelds()
         {
             foreach (PropertyInfo propInfo in GetType().GetProperties())
             {
@@ -50,35 +50,13 @@ namespace AutoMelder.MeldingLogic
             }
         }
         
-        public IEnumerable<MeldInfo> GetAllTwoSlotGuaranteedMelds()
+        public IEnumerable<MeldInfo> AllEnabledMelds(AutoMelderSettings settingsForm)
         {
             foreach (PropertyInfo propInfo in GetType().GetProperties())
             {
                 if (propInfo.GetValue(this) is MeldInfo meldInfo)
                 {
-                    if (meldInfo.EquipSlot?.Item?.MateriaSlots >= 2) yield return meldInfo;
-                }
-            }
-        }
-
-        public IEnumerable<MeldInfo> GetNonToolsMelds()
-        {
-            foreach (PropertyInfo propInfo in GetType().GetProperties())
-            {
-                if (propInfo.GetValue(this) is MeldInfo meldInfo)
-                {
-                    if (meldInfo.EquipType != EquipmentSlot.MainHand && meldInfo.EquipType != EquipmentSlot.OffHand) yield return meldInfo;
-                }
-            }
-        }
-        
-        public IEnumerable<MeldInfo> GetToolsMelds()
-        {
-            foreach (PropertyInfo propInfo in GetType().GetProperties())
-            {
-                if (propInfo.GetValue(this) is MeldInfo meldInfo)
-                {
-                    if (meldInfo.EquipType == EquipmentSlot.MainHand || meldInfo.EquipType == EquipmentSlot.OffHand) yield return meldInfo;
+                    if (meldInfo.IsEnabled(settingsForm)) yield return meldInfo;
                 }
             }
         }

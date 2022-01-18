@@ -26,7 +26,7 @@ namespace AutoMelder.Ariyala
                 return MeldRequest.Empty;
             }
             MeldRequest meldRequest = new MeldRequest();
-            foreach (MeldInfo meldInfo in meldRequest.GetAllMelds())
+            foreach (MeldInfo meldInfo in meldRequest.AllMelds())
             {
                 meldInfo.SetAriyalaInfo(info);
             }

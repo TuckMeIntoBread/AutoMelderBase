@@ -20,7 +20,7 @@ namespace AutoMelder.Etro
             if (!MeldLinkParser.TryGetResponse(uri, out JObject etroResponse)) return MeldRequest.Empty;
 
             MeldRequest meldRequest = new MeldRequest();
-            foreach (MeldInfo meldInfo in meldRequest.GetAllMelds())
+            foreach (MeldInfo meldInfo in meldRequest.AllMelds())
             {
                 meldInfo.SetEtroInfo(etroResponse);
             }
