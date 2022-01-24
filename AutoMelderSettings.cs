@@ -105,6 +105,7 @@ namespace AutoMelder
                 for (int i = currentCount; i < 5; i++)
                 {
                     MateriaItem desiredMateria = meldInfo.GetSlotByIndex(i);
+                    if (desiredMateria == null) break;
                     var guaranteedSlots = meldInfo.EquipSlot.Item.MateriaSlots;
                     if (i < guaranteedSlots)
                     {
