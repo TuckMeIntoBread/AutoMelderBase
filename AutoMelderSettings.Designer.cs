@@ -32,12 +32,14 @@ namespace AutoMelder
         private void InitializeComponent()
         {
             this.mainHandGBox = new System.Windows.Forms.GroupBox();
+            this.mainhandEnabledCBox = new System.Windows.Forms.CheckBox();
             this.mainhandMateria5 = new System.Windows.Forms.TextBox();
             this.mainhandMateria4 = new System.Windows.Forms.TextBox();
             this.mainhandMateria3 = new System.Windows.Forms.TextBox();
             this.mainhandMateria2 = new System.Windows.Forms.TextBox();
             this.mainhandMateria1 = new System.Windows.Forms.TextBox();
             this.offHandGBox = new System.Windows.Forms.GroupBox();
+            this.offhandEnabledCBox = new System.Windows.Forms.CheckBox();
             this.offhandMateria5 = new System.Windows.Forms.TextBox();
             this.offhandMateria4 = new System.Windows.Forms.TextBox();
             this.offhandMateria3 = new System.Windows.Forms.TextBox();
@@ -51,12 +53,14 @@ namespace AutoMelder
             this.headMateria2 = new System.Windows.Forms.TextBox();
             this.headMateria1 = new System.Windows.Forms.TextBox();
             this.legsGBox = new System.Windows.Forms.GroupBox();
+            this.legsEnabledCBox = new System.Windows.Forms.CheckBox();
             this.legsMateria5 = new System.Windows.Forms.TextBox();
             this.legsMateria4 = new System.Windows.Forms.TextBox();
             this.legsMateria3 = new System.Windows.Forms.TextBox();
             this.legsMateria2 = new System.Windows.Forms.TextBox();
             this.legsMateria1 = new System.Windows.Forms.TextBox();
             this.handsGBox = new System.Windows.Forms.GroupBox();
+            this.handsEnabledCBox = new System.Windows.Forms.CheckBox();
             this.handsMateria5 = new System.Windows.Forms.TextBox();
             this.handsMateria4 = new System.Windows.Forms.TextBox();
             this.handsMateria3 = new System.Windows.Forms.TextBox();
@@ -70,36 +74,42 @@ namespace AutoMelder
             this.chestMateria2 = new System.Windows.Forms.TextBox();
             this.chestMateria1 = new System.Windows.Forms.TextBox();
             this.neckGBox = new System.Windows.Forms.GroupBox();
+            this.neckEnabledCBox = new System.Windows.Forms.CheckBox();
             this.neckMateria5 = new System.Windows.Forms.TextBox();
             this.neckMateria4 = new System.Windows.Forms.TextBox();
             this.neckMateria3 = new System.Windows.Forms.TextBox();
             this.neckMateria2 = new System.Windows.Forms.TextBox();
             this.neckMateria1 = new System.Windows.Forms.TextBox();
             this.earsGBox = new System.Windows.Forms.GroupBox();
+            this.earsEnabledCBox = new System.Windows.Forms.CheckBox();
             this.earsMateria5 = new System.Windows.Forms.TextBox();
             this.earsMateria1 = new System.Windows.Forms.TextBox();
             this.earsMateria4 = new System.Windows.Forms.TextBox();
             this.earsMateria2 = new System.Windows.Forms.TextBox();
             this.earsMateria3 = new System.Windows.Forms.TextBox();
             this.feetGBox = new System.Windows.Forms.GroupBox();
+            this.feetEnabledCBox = new System.Windows.Forms.CheckBox();
             this.feetMateria5 = new System.Windows.Forms.TextBox();
             this.feetMateria4 = new System.Windows.Forms.TextBox();
             this.feetMateria3 = new System.Windows.Forms.TextBox();
             this.feetMateria2 = new System.Windows.Forms.TextBox();
             this.feetMateria1 = new System.Windows.Forms.TextBox();
             this.ringRightGBox = new System.Windows.Forms.GroupBox();
+            this.ringRightEnabledCBox = new System.Windows.Forms.CheckBox();
             this.ringRightMateria5 = new System.Windows.Forms.TextBox();
             this.ringRightMateria4 = new System.Windows.Forms.TextBox();
             this.ringRightMateria3 = new System.Windows.Forms.TextBox();
             this.ringRightMateria2 = new System.Windows.Forms.TextBox();
             this.ringRightMateria1 = new System.Windows.Forms.TextBox();
             this.ringLeftGBox = new System.Windows.Forms.GroupBox();
+            this.ringLeftEnabledCBox = new System.Windows.Forms.CheckBox();
             this.ringLeftMateria5 = new System.Windows.Forms.TextBox();
             this.ringLeftMateria4 = new System.Windows.Forms.TextBox();
             this.ringLeftMateria3 = new System.Windows.Forms.TextBox();
             this.ringLeftMateria2 = new System.Windows.Forms.TextBox();
             this.ringLeftMateria1 = new System.Windows.Forms.TextBox();
             this.wristGBox = new System.Windows.Forms.GroupBox();
+            this.wristEnabledCBox = new System.Windows.Forms.CheckBox();
             this.wristMateria5 = new System.Windows.Forms.TextBox();
             this.wristMateria4 = new System.Windows.Forms.TextBox();
             this.wristMateria3 = new System.Windows.Forms.TextBox();
@@ -109,16 +119,6 @@ namespace AutoMelder
             this.estimateButton = new System.Windows.Forms.Button();
             this.importCodeBox = new System.Windows.Forms.TextBox();
             this.ignoreMismatchedCBox = new System.Windows.Forms.CheckBox();
-            this.handsEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.legsEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.feetEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.earsEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.neckEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.wristEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.ringLeftEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.ringRightEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.mainhandEnabledCBox = new System.Windows.Forms.CheckBox();
-            this.offhandEnabledCBox = new System.Windows.Forms.CheckBox();
             this.mainHandGBox.SuspendLayout();
             this.offHandGBox.SuspendLayout();
             this.headGBox.SuspendLayout();
@@ -147,6 +147,18 @@ namespace AutoMelder
             this.mainHandGBox.TabIndex = 0;
             this.mainHandGBox.TabStop = false;
             this.mainHandGBox.Text = "Main Hand";
+            // 
+            // mainhandEnabledCBox
+            // 
+            this.mainhandEnabledCBox.AutoSize = true;
+            this.mainhandEnabledCBox.Checked = true;
+            this.mainhandEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mainhandEnabledCBox.Location = new System.Drawing.Point(6, 149);
+            this.mainhandEnabledCBox.Name = "mainhandEnabledCBox";
+            this.mainhandEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.mainhandEnabledCBox.TabIndex = 23;
+            this.mainhandEnabledCBox.Text = "Enabled";
+            this.mainhandEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // mainhandMateria5
             // 
@@ -207,6 +219,18 @@ namespace AutoMelder
             this.offHandGBox.TabIndex = 5;
             this.offHandGBox.TabStop = false;
             this.offHandGBox.Text = "Off Hand";
+            // 
+            // offhandEnabledCBox
+            // 
+            this.offhandEnabledCBox.AutoSize = true;
+            this.offhandEnabledCBox.Checked = true;
+            this.offhandEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.offhandEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.offhandEnabledCBox.Name = "offhandEnabledCBox";
+            this.offhandEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.offhandEnabledCBox.TabIndex = 24;
+            this.offhandEnabledCBox.Text = "Enabled";
+            this.offhandEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // offhandMateria5
             // 
@@ -340,6 +364,18 @@ namespace AutoMelder
             this.legsGBox.TabStop = false;
             this.legsGBox.Text = "Legs";
             // 
+            // legsEnabledCBox
+            // 
+            this.legsEnabledCBox.AutoSize = true;
+            this.legsEnabledCBox.Checked = true;
+            this.legsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.legsEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.legsEnabledCBox.Name = "legsEnabledCBox";
+            this.legsEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.legsEnabledCBox.TabIndex = 23;
+            this.legsEnabledCBox.Text = "Enabled";
+            this.legsEnabledCBox.UseVisualStyleBackColor = true;
+            // 
             // legsMateria5
             // 
             this.legsMateria5.Location = new System.Drawing.Point(6, 121);
@@ -399,6 +435,18 @@ namespace AutoMelder
             this.handsGBox.TabIndex = 8;
             this.handsGBox.TabStop = false;
             this.handsGBox.Text = "Hands";
+            // 
+            // handsEnabledCBox
+            // 
+            this.handsEnabledCBox.AutoSize = true;
+            this.handsEnabledCBox.Checked = true;
+            this.handsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.handsEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.handsEnabledCBox.Name = "handsEnabledCBox";
+            this.handsEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.handsEnabledCBox.TabIndex = 23;
+            this.handsEnabledCBox.Text = "Enabled";
+            this.handsEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // handsMateria5
             // 
@@ -532,6 +580,18 @@ namespace AutoMelder
             this.neckGBox.TabStop = false;
             this.neckGBox.Text = "Neck";
             // 
+            // neckEnabledCBox
+            // 
+            this.neckEnabledCBox.AutoSize = true;
+            this.neckEnabledCBox.Checked = true;
+            this.neckEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.neckEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.neckEnabledCBox.Name = "neckEnabledCBox";
+            this.neckEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.neckEnabledCBox.TabIndex = 23;
+            this.neckEnabledCBox.Text = "Enabled";
+            this.neckEnabledCBox.UseVisualStyleBackColor = true;
+            // 
             // neckMateria5
             // 
             this.neckMateria5.Location = new System.Drawing.Point(6, 121);
@@ -591,6 +651,18 @@ namespace AutoMelder
             this.earsGBox.TabIndex = 11;
             this.earsGBox.TabStop = false;
             this.earsGBox.Text = "Ears";
+            // 
+            // earsEnabledCBox
+            // 
+            this.earsEnabledCBox.AutoSize = true;
+            this.earsEnabledCBox.Checked = true;
+            this.earsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.earsEnabledCBox.Location = new System.Drawing.Point(6, 149);
+            this.earsEnabledCBox.Name = "earsEnabledCBox";
+            this.earsEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.earsEnabledCBox.TabIndex = 23;
+            this.earsEnabledCBox.Text = "Enabled";
+            this.earsEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // earsMateria5
             // 
@@ -652,6 +724,18 @@ namespace AutoMelder
             this.feetGBox.TabStop = false;
             this.feetGBox.Text = "Feet";
             // 
+            // feetEnabledCBox
+            // 
+            this.feetEnabledCBox.AutoSize = true;
+            this.feetEnabledCBox.Checked = true;
+            this.feetEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.feetEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.feetEnabledCBox.Name = "feetEnabledCBox";
+            this.feetEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.feetEnabledCBox.TabIndex = 23;
+            this.feetEnabledCBox.Text = "Enabled";
+            this.feetEnabledCBox.UseVisualStyleBackColor = true;
+            // 
             // feetMateria5
             // 
             this.feetMateria5.Location = new System.Drawing.Point(6, 121);
@@ -711,6 +795,18 @@ namespace AutoMelder
             this.ringRightGBox.TabIndex = 15;
             this.ringRightGBox.TabStop = false;
             this.ringRightGBox.Text = "Ring Right";
+            // 
+            // ringRightEnabledCBox
+            // 
+            this.ringRightEnabledCBox.AutoSize = true;
+            this.ringRightEnabledCBox.Checked = true;
+            this.ringRightEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ringRightEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.ringRightEnabledCBox.Name = "ringRightEnabledCBox";
+            this.ringRightEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.ringRightEnabledCBox.TabIndex = 23;
+            this.ringRightEnabledCBox.Text = "Enabled";
+            this.ringRightEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // ringRightMateria5
             // 
@@ -772,6 +868,18 @@ namespace AutoMelder
             this.ringLeftGBox.TabStop = false;
             this.ringLeftGBox.Text = "Ring Left";
             // 
+            // ringLeftEnabledCBox
+            // 
+            this.ringLeftEnabledCBox.AutoSize = true;
+            this.ringLeftEnabledCBox.Checked = true;
+            this.ringLeftEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ringLeftEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.ringLeftEnabledCBox.Name = "ringLeftEnabledCBox";
+            this.ringLeftEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.ringLeftEnabledCBox.TabIndex = 23;
+            this.ringLeftEnabledCBox.Text = "Enabled";
+            this.ringLeftEnabledCBox.UseVisualStyleBackColor = true;
+            // 
             // ringLeftMateria5
             // 
             this.ringLeftMateria5.Location = new System.Drawing.Point(6, 121);
@@ -831,6 +939,18 @@ namespace AutoMelder
             this.wristGBox.TabIndex = 13;
             this.wristGBox.TabStop = false;
             this.wristGBox.Text = "Wrist";
+            // 
+            // wristEnabledCBox
+            // 
+            this.wristEnabledCBox.AutoSize = true;
+            this.wristEnabledCBox.Checked = true;
+            this.wristEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.wristEnabledCBox.Location = new System.Drawing.Point(6, 147);
+            this.wristEnabledCBox.Name = "wristEnabledCBox";
+            this.wristEnabledCBox.Size = new System.Drawing.Size(65, 17);
+            this.wristEnabledCBox.TabIndex = 23;
+            this.wristEnabledCBox.Text = "Enabled";
+            this.wristEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // wristMateria5
             // 
@@ -909,130 +1029,10 @@ namespace AutoMelder
             this.ignoreMismatchedCBox.AutoSize = true;
             this.ignoreMismatchedCBox.Location = new System.Drawing.Point(476, 830);
             this.ignoreMismatchedCBox.Name = "ignoreMismatchedCBox";
-            this.ignoreMismatchedCBox.Size = new System.Drawing.Size(116, 17);
+            this.ignoreMismatchedCBox.Size = new System.Drawing.Size(137, 17);
             this.ignoreMismatchedCBox.TabIndex = 20;
-            this.ignoreMismatchedCBox.Text = "Ignore Mismatched";
+            this.ignoreMismatchedCBox.Text = "Don\'t Meld Mismatched";
             this.ignoreMismatchedCBox.UseVisualStyleBackColor = true;
-            // 
-            // handsEnabledCBox
-            // 
-            this.handsEnabledCBox.AutoSize = true;
-            this.handsEnabledCBox.Checked = true;
-            this.handsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.handsEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.handsEnabledCBox.Name = "handsEnabledCBox";
-            this.handsEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.handsEnabledCBox.TabIndex = 23;
-            this.handsEnabledCBox.Text = "Enabled";
-            this.handsEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // legsEnabledCBox
-            // 
-            this.legsEnabledCBox.AutoSize = true;
-            this.legsEnabledCBox.Checked = true;
-            this.legsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.legsEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.legsEnabledCBox.Name = "legsEnabledCBox";
-            this.legsEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.legsEnabledCBox.TabIndex = 23;
-            this.legsEnabledCBox.Text = "Enabled";
-            this.legsEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // feetEnabledCBox
-            // 
-            this.feetEnabledCBox.AutoSize = true;
-            this.feetEnabledCBox.Checked = true;
-            this.feetEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.feetEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.feetEnabledCBox.Name = "feetEnabledCBox";
-            this.feetEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.feetEnabledCBox.TabIndex = 23;
-            this.feetEnabledCBox.Text = "Enabled";
-            this.feetEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // earsEnabledCBox
-            // 
-            this.earsEnabledCBox.AutoSize = true;
-            this.earsEnabledCBox.Checked = true;
-            this.earsEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.earsEnabledCBox.Location = new System.Drawing.Point(6, 149);
-            this.earsEnabledCBox.Name = "earsEnabledCBox";
-            this.earsEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.earsEnabledCBox.TabIndex = 23;
-            this.earsEnabledCBox.Text = "Enabled";
-            this.earsEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // neckEnabledCBox
-            // 
-            this.neckEnabledCBox.AutoSize = true;
-            this.neckEnabledCBox.Checked = true;
-            this.neckEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.neckEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.neckEnabledCBox.Name = "neckEnabledCBox";
-            this.neckEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.neckEnabledCBox.TabIndex = 23;
-            this.neckEnabledCBox.Text = "Enabled";
-            this.neckEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // wristEnabledCBox
-            // 
-            this.wristEnabledCBox.AutoSize = true;
-            this.wristEnabledCBox.Checked = true;
-            this.wristEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.wristEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.wristEnabledCBox.Name = "wristEnabledCBox";
-            this.wristEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.wristEnabledCBox.TabIndex = 23;
-            this.wristEnabledCBox.Text = "Enabled";
-            this.wristEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // ringLeftEnabledCBox
-            // 
-            this.ringLeftEnabledCBox.AutoSize = true;
-            this.ringLeftEnabledCBox.Checked = true;
-            this.ringLeftEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ringLeftEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.ringLeftEnabledCBox.Name = "ringLeftEnabledCBox";
-            this.ringLeftEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.ringLeftEnabledCBox.TabIndex = 23;
-            this.ringLeftEnabledCBox.Text = "Enabled";
-            this.ringLeftEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // ringRightEnabledCBox
-            // 
-            this.ringRightEnabledCBox.AutoSize = true;
-            this.ringRightEnabledCBox.Checked = true;
-            this.ringRightEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ringRightEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.ringRightEnabledCBox.Name = "ringRightEnabledCBox";
-            this.ringRightEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.ringRightEnabledCBox.TabIndex = 23;
-            this.ringRightEnabledCBox.Text = "Enabled";
-            this.ringRightEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // mainhandEnabledCBox
-            // 
-            this.mainhandEnabledCBox.AutoSize = true;
-            this.mainhandEnabledCBox.Checked = true;
-            this.mainhandEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.mainhandEnabledCBox.Location = new System.Drawing.Point(6, 149);
-            this.mainhandEnabledCBox.Name = "mainhandEnabledCBox";
-            this.mainhandEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.mainhandEnabledCBox.TabIndex = 23;
-            this.mainhandEnabledCBox.Text = "Enabled";
-            this.mainhandEnabledCBox.UseVisualStyleBackColor = true;
-            // 
-            // offhandEnabledCBox
-            // 
-            this.offhandEnabledCBox.AutoSize = true;
-            this.offhandEnabledCBox.Checked = true;
-            this.offhandEnabledCBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.offhandEnabledCBox.Location = new System.Drawing.Point(6, 147);
-            this.offhandEnabledCBox.Name = "offhandEnabledCBox";
-            this.offhandEnabledCBox.Size = new System.Drawing.Size(65, 17);
-            this.offhandEnabledCBox.TabIndex = 24;
-            this.offhandEnabledCBox.Text = "Enabled";
-            this.offhandEnabledCBox.UseVisualStyleBackColor = true;
             // 
             // AutoMelderSettings
             // 
