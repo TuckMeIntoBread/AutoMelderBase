@@ -65,8 +65,6 @@ namespace AutoMelder
         private async Task<bool> Run()
         {
             if (_isDone) return false;
-            _lastValidItem = 0;
-            _lastValidMateria = 0;
             StopMeldingSet.Clear();
             if (_settings?.MeldRequest == null)
             {
@@ -209,49 +207,9 @@ namespace AutoMelder
             return false;
         }
 
-        private static int _lastValidItem;
-        private static int _lastValidMateria;
+        private static async Task<bool> OpenMateriaAttachDialog() => await MateriaAttach.Instance.OpenMateriaAttachDialog();
 
-        private static async Task<bool> OpenMateriaAttachDialog()
-        {
-            if (MateriaAttachDialog.Instance.IsOpen) return true;
-            Log.Debug("Opening materia attach dialog");
-            // Try to select based on materia alone first... we should have them open due to meld requesting the specific item needed?
-            for (int i = _lastValidMateria; i < 10; i++)
-            {
-                MateriaAttach.Instance.ClickMateria(i);
-                int attachWait = _lastValidMateria > 0 && i == _lastValidMateria ? 1500 : 200;
-                await Coroutine.Wait(attachWait, () => MateriaAttachDialog.Instance.IsOpen);
-                if (MateriaAttachDialog.Instance.IsOpen)
-                {
-                    _lastValidMateria = i;
-                    goto exitLoop;
-                }
-            }
-            for (int i = _lastValidItem; i < 12; i++)
-            {
-                MateriaAttach.Instance.ClickItem(i);
-                int clickWait = _lastValidItem > 0 && i == _lastValidItem ? 500 : 250;
-                await Coroutine.Sleep(clickWait);
-                for (int j = _lastValidMateria; j < 10; j++)
-                {
-                    MateriaAttach.Instance.ClickMateria(j);
-                    int attachWait = _lastValidMateria > 0 && j == _lastValidMateria ? 1500 : 200;
-                    await Coroutine.Wait(attachWait, () => MateriaAttachDialog.Instance.IsOpen);
-                    if (MateriaAttachDialog.Instance.IsOpen)
-                    {
-                        _lastValidMateria = j;
-                        _lastValidItem = i;
-                        goto exitLoop;
-                    }
-                }
-            }
-            exitLoop:
-            await Coroutine.Wait(3000, () => AgentMeld.Instance.CanMeld || AgentMeld.Instance.Ready);
-            return MateriaAttachDialog.Instance.IsOpen;
-        }
-
-        private static BagSlot GetMateriaSlot(MateriaItem materiaItem)
+            private static BagSlot GetMateriaSlot(MateriaItem materiaItem)
         {
             return InventoryManager.FilledSlots.FirstOrDefault(x => x.RawItemId == materiaItem.Key);
         }
