@@ -209,7 +209,7 @@ namespace AutoMelder
 
         private static async Task<bool> OpenMateriaAttachDialog() => await MateriaAttach.Instance.OpenMateriaAttachDialog();
 
-            private static BagSlot GetMateriaSlot(MateriaItem materiaItem)
+        private static BagSlot GetMateriaSlot(MateriaItem materiaItem)
         {
             return InventoryManager.FilledSlots.FirstOrDefault(x => x.RawItemId == materiaItem.Key);
         }
