@@ -15,7 +15,7 @@ namespace AutoMelder.Ariyala
         {
             Log.Information($"Parsing ariyala code {ariyalaCode}");
 
-            var uri = $"https://ffxiv.ariyala.com/store.app?identifier={ariyalaCode}";
+            var uri = $"http://ffxiv.ariyala.com/store.app?identifier={ariyalaCode}";
             if (!MeldLinkParser.TryGetResponse(uri, out JObject ariyalaResponse)) return MeldRequest.Empty;
 
             var dataset = ariyalaResponse["content"].Value<string>();
