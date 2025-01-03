@@ -33,9 +33,14 @@ namespace AutoMelder.Etro
         {
             JToken itemToken = info[meld.EtroKey()];
             if (itemToken == null || itemToken.Type == JTokenType.Null) return;
-            uint itemId = itemToken.Value<uint>();
-            if (itemId == 0) return;
+            
+            // Safely handle potential null value
+            uint? nullableItemId = itemToken.Value<uint?>();
+            if (!nullableItemId.HasValue || nullableItemId.Value == 0) return;
+            
+            uint itemId = nullableItemId.Value;
             meld.ItemId = itemId;
+            
             string materiaString;
             // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (meld.EquipType)
@@ -50,13 +55,21 @@ namespace AutoMelder.Etro
                     materiaString = itemId.ToString();
                     break;
             }
+            
             JToken materiaInfo = info["materia"]?[materiaString];
             if (materiaInfo == null || !materiaInfo.HasValues) return;
+            
             var materiaIds = new List<int>();
             foreach (JToken jToken in materiaInfo.Values())
             {
-                materiaIds.Add(jToken.Value<int>());
+                // Safely handle potential null values in materia array
+                int? materiaId = jToken.Value<int?>();
+                if (materiaId.HasValue)
+                {
+                    materiaIds.Add(materiaId.Value);
+                }
             }
+            
             for (int i = 0; i < materiaIds.Count; i++)
             {
                 MateriaItem materia = MateriaParser.GetMateriaFromId(materiaIds[i]);
